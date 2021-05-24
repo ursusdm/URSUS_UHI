@@ -8,6 +8,7 @@ output:
     df_print: kable
     number_sections: true
   html_document: 
+    
     toc: true
     toc_depth: 2
     number_sections: true
@@ -15,6 +16,8 @@ output:
     theme: united
     highlight: tango
     fig_caption: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -60,7 +63,7 @@ library(RColorBrewer)
 
 ```{r set, include=FALSE}
 # Set folder with LANDSAT city images 
-cityName <- "SEVILLA"
+cityName <- "MALAGA"
 getwd()
 dataFiles <- paste("../data/",cityName, sep = "")
 files<-list.files(path=dataFiles, full.names = TRUE)
@@ -68,118 +71,7 @@ set.seed(1234)
 ```
 
 
-```{r croppingShapeFile, include=FALSE}
-
-# #####Load Shape for image cropping######
-
-#shpFile <- paste ("../data/SHAPEFILES/",cityName,"/",tolower(cityName),
-#                  ".shx", sep="")
-#shape  <- readOGR(shpFile)
-#################################################
-
-# Set lat,lng array of coordinates for city cropping
-
-#MALAGA
-# coordsMatrix = as.data.frame(matrix(rev(c(36.6608,-4.4586,36.7307,-4.5776,36.7419,-4.5507,36.7197,-4.5284,36.7244,-4.5044,36.7496,-4.4942,36.7515,-4.4784,36.7324,-4.4605,36.7384,-4.4524,36.7437,-4.4303,36.7613,-4.4242,36.7373,-4.4050,36.741,-4.3807,36.7223,-4.3384,36.7135,-4.3418,36.7171,-4.3618,36.7015,-4.4121)),ncol=2,byrow=TRUE))
-
-#SEVILLA
-coordsMatrix = as.data.frame(matrix(rev(c(37.3672222,-6.01416667,37.3480556,-5.99138889,37.3425,-5.98444444,37.34,-5.97527778,37.3422222,-5.96833333,37.3541667,-5.95944444,37.3619444,-5.93722222,37.3633333,-5.91555556,37.3647222,-5.90277778,37.3588889,-5.88916667,37.3561111,-5.88277778,37.3622222,-5.87333333,37.3694444,-5.8725,37.3769444,-5.87694444,37.3802778,-5.88638889,37.3819444,-5.89027778,37.3905556,-5.90666667,37.3952778,-5.91583333,37.405,-5.91027778,37.4105556,-5.915,37.4133333,-5.92277778,37.4138889,-5.93166667,37.4091667,-5.9475,37.4158333,-5.95055556,37.4238889,-5.95111111,37.4252778,-5.96194444,37.435,-5.96722222,37.4358333,-5.97333333,37.4233333,-6.00722222,37.3802778,-6.01444444)),ncol=2,byrow=TRUE))
-
-
-#BARNA
-# coordsMatrix = as.data.frame(matrix(rev(c(
-# 41.4219, 2.2367,41.4356, 2.2143,41.4466, 2.2094,41.4593, 2.1920,41.4332, 2.1395,41.4163, 2.1350,41.3969, 2.1039,41.3772, 2.0964,41.3666, 2.0983,41.3584, 2.1029,41.3489, 2.1147,41.3595, 2.1328,41.3560, 2.1350,41.3580, 2.1404,41.3513, 2.1539,41.3532, 2.1594,
-# 41.3705, 2.1761,41.3790, 2.1824,41.3738, 2.1903,41.3854, 2.1979,41.3955, 2.2106,41.4042, 2.2176,41.4067, 2.2264)),ncol=2,byrow=TRUE))
-
-#MADRID
-# coordsMatrix = as.data.frame(matrix(rev(c(
-# 40.5210,-3.6849,
-# 40.5396,-3.7038,
-# 40.5482,-3.7105,
-# 40.5540,-3.7146,
-# 40.5599,-3.7149,
-# 40.5599,-3.7121,
-# 40.5595,-3.7099,
-# 40.5581,-3.7057,
-# 40.5585,-3.7002,
-# 40.5602,-3.6936,
-# 40.5618,-3.6895,
-# 40.5500,-3.6819,
-# 40.5344,-3.6693,
-# 40.5245,-3.6659,
-# 40.5117,-3.6586,
-# 40.5077,-3.6333,
-# 40.5110,-3.6151,
-# 40.5013,-3.6024,
-# 40.4983,-3.6043,
-# 40.4944,-3.6053,
-# 40.4895,-3.6044,
-# 40.4838,-3.6042,
-# 40.4797,-3.6044,
-# 40.4794,-3.5919,
-# 40.4793,-3.5803,
-# 40.4691,-3.5679,
-# 40.4572,-3.5793,
-# 40.4516,-3.5725,
-# 40.4513,-3.5652,
-# 40.4447,-3.5356,
-# 40.4379,-3.5755,
-# 40.4416,-3.5932,
-# 40.4213,-3.6004,
-# 40.4147,-3.6160,
-# 40.4040,-3.5747,
-# 40.4090,-3.5661,
-# 40.4100,-3.5450,
-# 40.3941,-3.5421,
-# 40.3934,-3.5542,
-# 40.4017,-3.5735,
-# 40.3887,-3.5841,
-# 40.3732,-3.5987,
-# 40.3604,-3.6124,
-# 40.3728,-3.6378,
-# 40.3670,-3.6503,
-# 40.3666,-3.6610,
-# 40.3647,-3.6766,
-# 40.3414,-3.6650,
-# 40.3323,-3.6932,
-# 40.3314,-3.7139,
-# 40.3350,-3.7249,
-# 40.3655,-3.7209,
-# 40.3580,-3.7720,
-# 40.3645,-3.7766,
-# 40.3715,-3.7679,
-# 40.3759,-3.7855,
-# 40.3715,-3.7996,
-# 40.3838,-3.8001,
-# 40.3941,-3.7815,
-# 40.4003,-3.7746,
-# 40.4045,-3.7596,
-# 40.4232,-3.7300,
-# 40.4490,-3.7612,
-# 40.4423,-3.7901,
-# 40.4538,-3.7929,
-# 40.4630,-3.8042,
-# 40.4678,-3.8383,
-# 40.4795,-3.8367,
-# 40.4756, -3.8229,
-# 40.4695,-3.7980,
-# 40.4750,-3.7807,
-# 40.4732,-3.7590,
-# 40.4862,-3.7433,
-# 40.4935,-3.7342,
-# 40.5063,-3.7126)),ncol=2,byrow=TRUE))
-
-
-
-
-coords = SpatialPoints(coordsMatrix,proj4string = CRS("+proj=longlat"))
-
-cord.UTM <- spTransform(coords, CRS("+proj=utm +zone=29 +datum=WGS84 +units=m +no_defs"))
-
-P1 = Polygon(cord.UTM)
-Ps1 = SpatialPolygons(list(Polygons(list(P1), ID = "a")), proj4string=CRS("+proj=utm +zone=29 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"))
-
-```  
+ 
 
 
 ```{r bands, echo=FALSE, include=FALSE}
@@ -362,16 +254,18 @@ for (r in raster_list) {
 
 ###  Cropped AOI by drawing manual polygon extend. (execute  this cell if you need cut manually the city area of interest)
 
-```{r croppedByExtent, echo=FALSE}
-  #plot (landsatRGB[[1]])
-  plotRGB (landsatRGB,stretch="lin")
+```{r croppedByExtent, include=TRUE, echo=FALSE}
+  par(mfrow = c(1,1))
+  plotRGB(landsatRGB,stretch="lin") 
   e <- drawExtent(show=TRUE, col="red")
-
 ```
+  
 
 
-```{r croppedByExtent2, echo=FALSE}
+
+```{r croppedByExtentPlot, echo=FALSE}
   rasterListCropped <- c()
+par(mfrow = c(2,2))
  for (r in raster_list) {
     croped <- crop(x=r, e)
     #masked <- mask(x = croped, mask = e)
@@ -385,6 +279,7 @@ for (r in raster_list) {
 
 ```{r plotndvi, include=FALSE, fig.show="hold", out.width="50%"}
 
+raster_list <- rasterListCropped
 # Get NDVI pixel values for every image on a raster layer list
 
 # Raster NDVI List
@@ -637,7 +532,7 @@ lstRasterLayerList <- lstCalculation (BTList,emmisivityList)
 ```
 
 
-```{r lst_var_assing,  include=FALSE, fig.width=10, fig.align="center"}
+```{r lst_var_assing, echo=FALSE,  include=FALSE, fig.width=10, fig.align="center",out.width="50%"}
 
 lst_reclassification_list <- c()
 
@@ -687,16 +582,16 @@ for (lstRaster in lstRasterLayerList) {
   
   ## uncoment for plot all images
   if (allImages) {
-      plot(lstRaster,col = rev(heat.colors(length(breaks))), legend.args = 
-           list(paste(text='LST-',fechas[counter])),  breaks =breaks, 
-           axes=FALSE, horizontal = TRUE, box = FALSE)
+      #plot(lstRaster,col = rev(heat.colors(length(breaks))), legend.args = 
+           #list(paste(text='LST-',fechas[counter])),  breaks =breaks, 
+           #axes=FALSE, horizontal = TRUE, box = FALSE)
 
-    hist(lstRaster,
-         main=NULL,
-         xlab = "LST",
-         ylab= "Frequency",
-         col = "wheat",
-         )
+    #hist(lstRaster,
+        # main=NULL,
+        # xlab = "LST",
+        # ylab= "Frequency",
+         #col = "wheat",
+         #)
 
   }
   else if (counter ==1) {
@@ -811,7 +706,7 @@ for (n in ndvi_list) {
 
 indexPar <- 1
 
-par(mfrow = c(2,2))
+par(mfrow = c(1,2))
 
 for (n in ndvi_list) {
   
