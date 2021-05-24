@@ -115,7 +115,7 @@ E) Navigate over plots with left and right arrow to show plotted result (Cluster
 
 ## Licencia 📄
 
-Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
+This project is under GNU General Public License v3.0 [LICENSE.md](LICENSE.md) for more detail.
 
 ## Acknowledgements 🎁
 
