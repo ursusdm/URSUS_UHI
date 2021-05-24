@@ -1,6 +1,9 @@
 # URSUS_UHI
 
-URSUS_UHI is a tool for the automatic detection of the most disadvantaged areas due to the urban heat island effect (UHI). 
+URSUS_UHI is a tool based on data mining and machine learning for the automatic detection of the most disadvantaged areas due to the urban heat island effect (UHI). 
+
+<img width="1259" alt="Captura de pantalla 2021-05-24 a las 20 30 07" src="https://user-images.githubusercontent.com/68539118/119391636-e1a67700-bcce-11eb-9b01-42cafffdbf31.png">
+
 
 ### Requirements📋
 
