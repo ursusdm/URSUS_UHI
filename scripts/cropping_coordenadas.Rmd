@@ -1,0 +1,1416 @@
+---
+title: "Automatic analysis of temperature and vegetation to locate unfavourable urban areas attending to UHI effect"
+author: "Francisco Rodríguez Gómez, Domingo López Rodríguez, José del Campo Ávila, Luís Pérez Urrerastazu"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: true
+    df_print: kable
+    number_sections: true
+  html_document: 
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    df_print: kable
+    theme: united
+    highlight: tango
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60), echo = TRUE, 
+                      cache = FALSE, dev = 'pdf')
+```
+
+
+```{r libraries, include=FALSE}
+library(raster)
+library (knitr)
+library (rgdal)
+library(RStoolbox)
+library(imager)
+library(RGISTools)
+library(zoom)
+library(excelR)
+library(scico)
+library(leaflet)
+library(tidyverse)
+library(ggplot2)
+library(widgetframe)
+library(cetcolor)
+library(magick)
+library(imager)
+library(caret) # data wrangling
+library(rasterVis)
+library(factoextra)
+library(clustertend)
+library(NbClust)
+library(data.table)
+library (DescTools)
+library(RColorBrewer)
+library(wesanderson)
+library(ggplot2)
+library(formatR)
+library(kableExtra)
+library(ggpubr)
+library(colorRamps)
+library(RColorBrewer)
+
+```
+
+```{r set, include=FALSE}
+# Set folder with LANDSAT city images 
+cityName <- "SEVILLA"
+getwd()
+dataFiles <- paste("../data/",cityName, sep = "")
+files<-list.files(path=dataFiles, full.names = TRUE)
+set.seed(1234)
+```
+
+
+```{r croppingShapeFile, include=FALSE}
+
+# #####Load Shape for image cropping######
+
+#shpFile <- paste ("../data/SHAPEFILES/",cityName,"/",tolower(cityName),
+#                  ".shx", sep="")
+#shape  <- readOGR(shpFile)
+#################################################
+
+# Set lat,lng array of coordinates for city cropping
+
+#MALAGA
+# coordsMatrix = as.data.frame(matrix(rev(c(36.6608,-4.4586,36.7307,-4.5776,36.7419,-4.5507,36.7197,-4.5284,36.7244,-4.5044,36.7496,-4.4942,36.7515,-4.4784,36.7324,-4.4605,36.7384,-4.4524,36.7437,-4.4303,36.7613,-4.4242,36.7373,-4.4050,36.741,-4.3807,36.7223,-4.3384,36.7135,-4.3418,36.7171,-4.3618,36.7015,-4.4121)),ncol=2,byrow=TRUE))
+
+#SEVILLA
+coordsMatrix = as.data.frame(matrix(rev(c(37.3672222,-6.01416667,37.3480556,-5.99138889,37.3425,-5.98444444,37.34,-5.97527778,37.3422222,-5.96833333,37.3541667,-5.95944444,37.3619444,-5.93722222,37.3633333,-5.91555556,37.3647222,-5.90277778,37.3588889,-5.88916667,37.3561111,-5.88277778,37.3622222,-5.87333333,37.3694444,-5.8725,37.3769444,-5.87694444,37.3802778,-5.88638889,37.3819444,-5.89027778,37.3905556,-5.90666667,37.3952778,-5.91583333,37.405,-5.91027778,37.4105556,-5.915,37.4133333,-5.92277778,37.4138889,-5.93166667,37.4091667,-5.9475,37.4158333,-5.95055556,37.4238889,-5.95111111,37.4252778,-5.96194444,37.435,-5.96722222,37.4358333,-5.97333333,37.4233333,-6.00722222,37.3802778,-6.01444444)),ncol=2,byrow=TRUE))
+
+#VALENCIA
+
+# coordsMatrix = as.data.frame(matrix(rev(c(39.4160, -0.2795,
+# 39.4327, -0.4007,
+# 39.4827, -0.4317,
+# 39.4817, -0.4071,
+# 39.4875, -0.4053,
+# 39.4961, -0.4106,
+# 39.5027, -0.3916,
+# 39.4945, -0.3578,
+# 39.4887, -0.3231 )),ncol=2,byrow=TRUE))
+
+
+#BARNA
+# coordsMatrix = as.data.frame(matrix(rev(c(
+# 41.4219, 2.2367,41.4356, 2.2143,41.4466, 2.2094,41.4593, 2.1920,41.4332, 2.1395,41.4163, 2.1350,41.3969, 2.1039,41.3772, 2.0964,41.3666, 2.0983,41.3584, 2.1029,41.3489, 2.1147,41.3595, 2.1328,41.3560, 2.1350,41.3580, 2.1404,41.3513, 2.1539,41.3532, 2.1594,
+# 41.3705, 2.1761,41.3790, 2.1824,41.3738, 2.1903,41.3854, 2.1979,41.3955, 2.2106,41.4042, 2.2176,41.4067, 2.2264)),ncol=2,byrow=TRUE))
+
+#MADRID
+# coordsMatrix = as.data.frame(matrix(rev(c(
+# 40.5210,-3.6849,
+# 40.5396,-3.7038,
+# 40.5482,-3.7105,
+# 40.5540,-3.7146,
+# 40.5599,-3.7149,
+# 40.5599,-3.7121,
+# 40.5595,-3.7099,
+# 40.5581,-3.7057,
+# 40.5585,-3.7002,
+# 40.5602,-3.6936,
+# 40.5618,-3.6895,
+# 40.5500,-3.6819,
+# 40.5344,-3.6693,
+# 40.5245,-3.6659,
+# 40.5117,-3.6586,
+# 40.5077,-3.6333,
+# 40.5110,-3.6151,
+# 40.5013,-3.6024,
+# 40.4983,-3.6043,
+# 40.4944,-3.6053,
+# 40.4895,-3.6044,
+# 40.4838,-3.6042,
+# 40.4797,-3.6044,
+# 40.4794,-3.5919,
+# 40.4793,-3.5803,
+# 40.4691,-3.5679,
+# 40.4572,-3.5793,
+# 40.4516,-3.5725,
+# 40.4513,-3.5652,
+# 40.4447,-3.5356,
+# 40.4379,-3.5755,
+# 40.4416,-3.5932,
+# 40.4213,-3.6004,
+# 40.4147,-3.6160,
+# 40.4040,-3.5747,
+# 40.4090,-3.5661,
+# 40.4100,-3.5450,
+# 40.3941,-3.5421,
+# 40.3934,-3.5542,
+# 40.4017,-3.5735,
+# 40.3887,-3.5841,
+# 40.3732,-3.5987,
+# 40.3604,-3.6124,
+# 40.3728,-3.6378,
+# 40.3670,-3.6503,
+# 40.3666,-3.6610,
+# 40.3647,-3.6766,
+# 40.3414,-3.6650,
+# 40.3323,-3.6932,
+# 40.3314,-3.7139,
+# 40.3350,-3.7249,
+# 40.3655,-3.7209,
+# 40.3580,-3.7720,
+# 40.3645,-3.7766,
+# 40.3715,-3.7679,
+# 40.3759,-3.7855,
+# 40.3715,-3.7996,
+# 40.3838,-3.8001,
+# 40.3941,-3.7815,
+# 40.4003,-3.7746,
+# 40.4045,-3.7596,
+# 40.4232,-3.7300,
+# 40.4490,-3.7612,
+# 40.4423,-3.7901,
+# 40.4538,-3.7929,
+# 40.4630,-3.8042,
+# 40.4678,-3.8383,
+# 40.4795,-3.8367,
+# 40.4756, -3.8229,
+# 40.4695,-3.7980,
+# 40.4750,-3.7807,
+# 40.4732,-3.7590,
+# 40.4862,-3.7433,
+# 40.4935,-3.7342,
+# 40.5063,-3.7126)),ncol=2,byrow=TRUE))
+
+
+
+
+coords = SpatialPoints(coordsMatrix,proj4string = CRS("+proj=longlat"))
+
+
+
+```  
+
+
+```{r bands, echo=FALSE, include=FALSE}
+
+# Create a raster_list with all bands for every cropped image 
+
+raster_list <- c()
+
+metadata_list <- c()
+
+#for each image to be processed
+for (file in files){
+  
+  #Get Bands files and metadata file for image
+  f_<-list.files(path=file, full.names = TRUE)
+  
+  for (f in f_) {
+    
+    #If file isa a band file, create a raster object
+    
+    ##B2, Blue.
+    if (str_detect(f, "B2.TIF", negate = FALSE)) {
+      b2 <- raster(f)
+    }
+    
+    #B3 Green
+    else if (str_detect(f, "B3.TIF", negate = FALSE)){
+      b3 <- raster(f)
+    } 
+    
+    #B4 Red
+    else if (str_detect(f, "B4.TIF", negate = FALSE)){
+      b4 <- raster(f)
+    } 
+    
+    #B5 NIR
+    else if (str_detect(f, "B5.TIF", negate = FALSE)){
+      b5 <- raster(f)
+    } 
+    
+    #B10
+    else if (str_detect(f, "B10.TIF", negate = FALSE)){
+      b10 <- raster(f)
+    }
+    
+    #B11
+    else if (str_detect(f, "B11.TIF", negate = FALSE)){
+      b11 <- raster(f)
+    } 
+    
+    #B1 
+    else if (str_detect(f, "B1.TIF", negate = FALSE)){
+      b1 <- raster(f)
+    } 
+    
+    #B6
+    else if (str_detect(f, "B6.TIF", negate = FALSE)){
+      b6 <- raster(f)
+    } 
+    
+    #B7
+    else if (str_detect(f, "B7.TIF", negate = FALSE)){
+      b7 <- raster(f)
+    } 
+    
+    #B8
+    else if (str_detect(f, "B8.TIF", negate = FALSE)){
+      b8 <- raster(f)
+    } 
+    
+    #B9 
+    else if (str_detect(f, "B9.TIF", negate = FALSE)){
+      b9 <- raster(f)
+    } 
+    
+     else if (str_detect(f, "MTL.txt", negate = FALSE)){
+      metad <- f
+    } 
+      
+  }
+  
+  #Assign metadata file for image to metadata_list (with all metadata files for images)
+  metadata_list <- append(metadata_list,metad)
+  
+  #raster stack with bands for image
+  
+  image <- stack(b2,b3,b4,b5,b10,b11)
+  
+  
+  
+  #get zone from image
+  
+  #crs(image)
+  
+  cord.UTM <- spTransform(coords, crs(image))
+
+  P1 = Polygon(cord.UTM)
+  Ps1 = SpatialPolygons(list(Polygons(list(P1), ID = "a")), proj4string=crs(image))
+  
+  ##############CROPPING CON SHAPE FILE#################
+  
+  #Aplicamos el cropping con el shape a cada imagen de la ciudad
+  
+  #Convertimos la shape de lat,lng a UTM ya que las imagenes landsat trabajan
+  #con proyección UTM
+  #maskedTransform <- spTransform(x = shape, 
+  #                               CRSobj ='+proj=utm +zone=31 +datum=WGS84 +units=m +no_defs ')
+  
+  #Realizamos el crop rectangular con la extension del shape
+  #croped <- crop(x=image, extent(maskedTransform))
+  
+  #Aplicamos la mascara al crop rectangular
+  #masked <- mask(x = croped, mask = maskedTransform)
+  
+  #########################################
+  
+  croped <- crop(x=image, extent(Ps1))
+  
+  # Landsat cropped image
+  masked <- mask(x = croped, mask = Ps1)
+
+  # Add raster stack with raster bands for every image
+  raster_list <- append(raster_list,masked)
+  
+}
+
+
+```
+
+
+
+### landsat-8 cropped images from city
+
+```{r plotbandsrt, echo=FALSE}
+
+allImages <- TRUE
+
+par(mfrow = c(2,2))
+
+# Array with image date
+fechas <- c(mode="character")
+
+counter <- 1 
+
+#Update fechas[image] getting date from image metadata file
+for (m in metadata_list) {
+  mtD <- readMeta(m)
+  f <-  mtD$ACQUISITION_DATE
+  fechas[counter] <- as.character(f)
+  counter <- counter +1
+}
+
+counter <- 1
+
+# Iterating every raster stack landsat image
+for (r in raster_list) {
+  
+  print (fechas[counter])
+  
+  #Get bands
+  banda4 <- r[[3]]
+  banda3 <- r[[2]]
+  banda5 <- r[[4]]
+  banda2 <- r[[1]]
+
+  #Get RGB image band
+  landsatRGB <- stack (banda4,banda3,banda2)
+  landsatFCC <- stack (banda5,banda4,banda3)
+  
+  #plot all images
+  if (allImages) {
+    print(plotRGB(landsatRGB, stretch="lin", maxpixels= 1920 * 1080,  main=paste (fechas[counter],
+                                                         "True Color") ))
+  }
+  
+  #plot one image
+  else if (counter==1) {
+        print(plotRGB(landsatRGB,  stretch="lin", main=paste (fechas[counter],
+                                                              "True Color") ))
+  }
+
+  counter <- counter+1
+  
+}
+
+#rm (mtD,landsatRGB,landsatFCC,banda4,banda3,banda5,banda2,f)
+
+```
+
+
+```{r plotndvi, include=FALSE, fig.show="hold", out.width="50%"}
+
+# Get NDVI pixel values for every image on a raster layer list
+
+# Raster NDVI List
+ndvi_list <- c()
+
+counter_ndvi <- 1
+
+#NDVI calculation function (@param: bk:capa raster con la banda 5,
+#bi:banda 4)
+vi <- function(bk, bi) {
+  vi <- (bk - bi) / (bk + bi)
+  return(vi)
+}
+
+par(mfrow = c(1,2))
+
+for (r in raster_list) {
+
+  # SGet band 5 & 4 fon NDVI caltulation
+  band_5 <- r[[4]]
+  band4 <- r[[3]]
+
+  # For Landsat NIR = 5, red = 4.
+  ndvi <- vi(band_5, band4)
+  
+  #get common min and max ndvi for all images
+  minNDVI <- min (na.omit(values(ndvi)))
+  maxNDVI <- max (na.omit(values(ndvi)))
+  if (counter_ndvi==1) {
+    minComun <- minNDVI
+    maxComun <- maxNDVI
+  }
+  else {
+    if (minNDVI<minComun) {
+      minComun <- minNDVI
+    }
+     if (maxNDVI>maxComun) {
+      maxComun <- maxNDVI
+    } 
+  }
+  
+  ## Remove outliers values (< -1 and > -1)
+  ndvi[ndvi>1] <- 1
+  ndvi[ndvi< -1] <- -1
+  
+  ndvi_list <- append(ndvi_list,ndvi)
+  
+  counter_ndvi <- counter_ndvi + 1
+
+}
+
+```
+
+
+
+```{r lstPVCalculation,  include=FALSE}
+
+# Proportion of vegetation calculation
+
+PVCalculation = function (NDVIRastertList) {
+  
+  PVCalculationList <- list()
+  
+  #Constants ndvi_vegetation and ndvi_floor
+  NDVI_V <- 0.5
+  NDVI_S <- 0.2
+  
+  count <- 1
+  
+  #For every raster layer with Bright Temperature values
+  for (ndviRaster in NDVIRastertList) {
+    PV = ((ndviRaster-NDVI_S) / (NDVI_V-NDVI_S))^2
+    PVCalculationList[[count]] <- PV
+    count <- count+1
+  }
+  
+  return (PVCalculationList);
+  
+}
+```
+
+
+```{r lstEmissivityCalculation,  include=FALSE}
+
+# Emissivity calculation
+
+EmissivityCalculation = function (PVRastertList,NDVIRasterList) {
+  
+  emissivityCalculationList <- list()
+  
+  emisividadSuelo <- 0.985
+  emisividadVegetacion <- 0.973
+  emisividadAgua <- 0.991
+  
+  NDVI_V <- 0.5
+  NDVI_S <- 0.2
+  
+  C <- 0.005
+  
+  count <- 1
+  
+  for (PV in PVRastertList) {
+    
+    ndviRaster <- NDVIRasterList[[count]]
+   
+    emisivityRaster <- ndviRaster
+    
+    emisivityRaster[ndviRaster>=0 & ndviRaster<NDVI_S ] <- emisividadSuelo
+    
+    emisivityRaster[ndviRaster<0] <- emisividadAgua
+    
+    positions <- which( values(ndviRaster)>=NDVI_S & values(ndviRaster)<=NDVI_V     )
+
+     emisivityRaster[positions] <- emisividadVegetacion * PV[positions] +
+       emisividadSuelo * (1- PV[positions]) + C
+    
+    emisivityRaster[ndviRaster>NDVI_V] <- emisividadSuelo + C
+    
+    emissivityCalculationList[[count]] <- emisivityRaster
+    
+    count <- count+1
+    
+  }
+  
+  return (emissivityCalculationList);
+  
+}
+```
+
+
+```{r lstCalculation,  include=FALSE}
+
+lstCalculation = function (BTList,emmisivityList ) {
+  
+  lstCalculationList <- list()
+  
+  alpha_ <- 10.895
+  p <- 14388
+  
+  count <- 1
+  
+  for (BT in BTList) {
+  
+    lstRaster <- BT/ (    1+ ( ((alpha_*BT)/p)   * log (emmisivityList[[count]])  )   )
+    lstCalculationList[[count]] <- lstRaster
+    count <- count+1
+  }
+  
+  return (lstCalculationList);
+  
+}
+
+```
+
+
+
+```{r toa,  warning=FALSE, include=FALSE}
+
+index <-  1
+
+# TOA raster list with TOA values for every image
+toa_list <- c()
+
+for (r in metadata_list) {
+  
+  metaData <- readMeta(r)
+    
+  #Get DN (digital numbers values) from metadata file
+  RADIANCE_MULT_BAND_10 <- metaData$CALRAD$gain[10] 
+  RADIANCE_MULT_BAND_11 <- metaData$CALRAD$gain[11]
+  
+  RADIANCE_ADD_BAND_10 <- metaData$CALRAD$offset[10]
+  RADIANCE_ADD_BAND_11 <- metaData$CALRAD$offset[11]
+  
+  #get band10 and band11 values for image
+  banda_10 <- raster_list[[index]][[5]]
+  banda_11 <- raster_list[[index]][[6]]
+  
+  #Calculate TOA from Digital Number (DN):
+  toa_band10 <- calc(banda_10, fun=function(x){RADIANCE_MULT_BAND_10 * x + RADIANCE_ADD_BAND_10})
+  
+  toa_band11 <- calc(banda_11, fun=function(x){RADIANCE_MULT_BAND_11 * x + RADIANCE_ADD_BAND_11})
+  
+  toa_list_10 <- append(toa_list,toa_band10)
+  toa_list_11 <- append(toa_list,toa_band11)
+  
+  index <- index+1
+  
+  toa_list <- toa_list_11
+
+}
+
+
+```
+
+
+```{r bright, include=FALSE, warning=FALSE, include=FALSE}
+
+#calculate array with Brightness Temperatures raster layers for every image
+temp10_list <- c()
+temp11_list <- c()
+
+count_ <- 1
+
+for (r in metadata_list) {
+  
+  metaData <- readMeta(r)
+
+  #get Values from Metafile file
+  K1_CONSTANT_BAND_10 <- metaData$CALBT$K1[1]
+  K1_CONSTANT_BAND_11 <- metaData$CALBT$K1[2]
+  K2_CONSTANT_BAND_10 <- metaData$CALBT$K2[1]
+  K2_CONSTANT_BAND_11 <- metaData$CALBT$K2[2]
+  
+  #Calculate LST in Kelvin for Band 10 
+  temp10_kelvin <- calc(toa_list[[count_]], fun=function(x){
+    K2_CONSTANT_BAND_10/log(K1_CONSTANT_BAND_10/x + 1)
+    })
+  
+
+  #For  Band 11
+  temp11_kelvin <- calc(toa_list[[count_]], fun=function(x){
+    K2_CONSTANT_BAND_11/log(K1_CONSTANT_BAND_11/x + 1)
+    })
+  
+  #Convert Kelvin to Celsius for Band 10 and 11
+  temp10_celsius <- calc(temp10_kelvin, fun=function(x){x - 273.15})
+  temp11_celsius <- calc(temp11_kelvin, fun=function(x){x - 273.15})
+  
+  temp10_list <- append(temp10_list,temp10_celsius)
+  temp11_list <- append(temp11_list,temp11_celsius)
+  
+  count_ <-  count_+1
+  
+}
+
+#BTList <- temp10_list
+BTList <- temp11_list
+
+```
+
+
+```{r LSTCalculation,  include=FALSE}
+#Calculate proportion of vegetation for every image
+PVList <- PVCalculation (ndvi_list)
+#Calculate emissivity for every image
+emmisivityList <- EmissivityCalculation(PVList,ndvi_list)
+#Calculate  LST for every image
+lstRasterLayerList <- lstCalculation (BTList,emmisivityList)
+```
+
+
+```{r lst_var_assing,  include=FALSE, fig.width=10, fig.align="center"}
+
+lst_reclassification_list <- c()
+
+counter <- 1
+
+ par(mfrow = c(1,2))
+
+for (lstRaster in lstRasterLayerList) {
+  
+  #get min and  max common
+  
+  lst_reclassification_list <- append(lst_reclassification_list,lstRaster)
+  
+  
+  minLST <- min (na.omit(values(lstRaster)))
+  maxLST <- max (na.omit(values(lstRaster)))
+  
+  # 
+  if (counter==1) {
+    minComun <- minLST
+    maxComun <- maxLST
+  }
+  
+  else {
+    if (minLST<minComun) {
+      minComun <- minLST
+    }
+     if (maxLST>maxComun) {
+      maxComun <- maxLST
+    } 
+  }
+  
+  counter <- counter+1
+  
+
+}
+ 
+ 
+ breaks <- seq(round(minComun), round(maxComun), by = 1)
+ 
+ breaksLST <- breaks
+ 
+counter <- 1
+
+for (lstRaster in lstRasterLayerList) {
+   
+  
+  ## uncoment for plot all images
+  if (allImages) {
+      plot(lstRaster,col = rev(heat.colors(length(breaks))), legend.args = 
+           list(paste(text='LST-',fechas[counter])),  breaks =breaks, 
+           axes=FALSE, horizontal = TRUE, box = FALSE)
+
+    hist(lstRaster,
+         main=NULL,
+         xlab = "LST",
+         ylab= "Frequency",
+         col = "wheat",
+         )
+
+  }
+  else if (counter ==1) {
+    plot(lstRaster,col = rev(heat.colors(12)), legend.args =
+         list(paste(text='LST-',fechas[counter])),  
+         axes=FALSE, horizontal = TRUE, box = FALSE)
+    
+    
+    hist(lstRaster,
+         main=NULL,
+         xlab = "LST",
+         ylab= "Frequency",
+         col = "wheat",
+         )
+    
+
+    
+  }
+  
+  counter <-  counter + 1
+   
+}
+
+#rm (brightTemp)
+
+
+```
+
+
+## NDVI threesolding for urban classification.
+
+- **Class 1:** WATER, NDVI<=0
+- **Class 2:** NO VEGETACION, NDVI(0-0.2]
+- **Class 3:** LOW VEGETATION, NDVI(0.2,0.4]
+- **Class 4:** MODERATE VEGETATION, NDVI(0.4-0.6]
+- **Class 5:** DENSE VEGETATION, NDVI(0.6,1]
+
+```{r plotndvithre, echo=FALSE,  fig.show="hold", out.width="50%"}
+
+# discretized ndvi raster layer list 
+
+reclasifyNDVIList = c()
+
+counter_ndvi <- 1
+
+for (n in ndvi_list) {
+  
+  #Create a raster layer with discretized ndvi values
+  vegc <- reclassify(n, c(-Inf,0,1, 0,0.2,2,0.2,0.4,3, 0.4,0.6,4,
+                          0.6,Inf, 5))
+  
+  # legend processing
+  myraster<-as.factor(vegc)
+
+  tar<-levels(myraster)[[1]]
+  
+  exist_water <- 1 %in% tar$ID
+  exist_no_veg <- 2 %in% tar$ID
+  exist_low_veg <- 3 %in% tar$ID
+  exist_moderate_veg <- 4 %in% tar$ID
+  exist_dense_veg <- 5 %in% tar$ID
+  
+  array_with_existing_urban_class <- c()
+  
+  if (exist_water)
+    array_with_existing_urban_class <- 
+    append (array_with_existing_urban_class,"Water")
+  if (exist_no_veg)
+    array_with_existing_urban_class <- 
+    append (array_with_existing_urban_class,"No vegetation")
+  if (exist_low_veg)
+    array_with_existing_urban_class <- 
+    append (array_with_existing_urban_class,"Low vegetation")
+  if (exist_moderate_veg)
+    array_with_existing_urban_class <- 
+    append (array_with_existing_urban_class,"Moderate vegetation")
+  if (exist_dense_veg)
+    array_with_existing_urban_class <- 
+    append (array_with_existing_urban_class,"Dense vegetation")
+  
+  
+  tar[["landcover"]]<-array_with_existing_urban_class
+  levels(myraster)<-tar
+  
+  if (allImages) {
+      print(levelplot(myraster ,xlab=NULL, ylab=NULL,  box=FALSE,
+                       par.settings = list(axis.line = list(col = "transparent")),
+                      scales=list(draw=FALSE), legend.args =
+                      list(paste (fechas[counter_ndvi],"Urban area classification") ),
+                      col.regions=rev(terrain.colors(5))) )
+  }
+  
+  else if (counter_ndvi ==1) {
+     print(levelplot(myraster ,xlab=NULL, ylab=NULL, box=FALSE,
+                      par.settings = list(axis.line = list(col = "transparent")),
+                     scales=list(draw=FALSE), legend.args = 
+                    list(paste (fechas[counter_ndvi],"Urban area classification") ),
+                     col.regions=rev(terrain.colors(5))) )
+  }
+  
+  counter_ndvi <-  counter_ndvi + 1
+  reclasifyNDVIList  <- append (reclasifyNDVIList,vegc)
+}
+
+
+```
+
+## LST, LST histogram, NDVI, and NDVI histogram for the processed images from city.
+
+
+```{r resumeplot, echo=FALSE, out.width="50%"}
+
+indexPar <- 1
+
+par(mfrow = c(2,2))
+
+for (n in ndvi_list) {
+  
+  #uncomment for plot all images
+  if (allImages) {
+    
+    breaks <- breaksLST
+       
+    plot(lst_reclassification_list[[indexPar]],col = rev(heat.colors(length(breaks))), legend.args = 
+     list(paste(text='LST(ºC) ',fechas[indexPar])),  breaks =breaks, 
+     axes=FALSE, horizontal = TRUE, box = FALSE)
+     counter <-  counter + 1
+    hist(lst_reclassification_list[[indexPar]],
+         main=NULL,
+         xlab = "LST(ºC)",
+         ylab= "Frequency",
+         col = "wheat",
+         )
+  
+    
+ breaks <- seq(-1, 1, by = 0.1)
+    
+         plot(n, legend.args = 
+           list(paste(text='NDVI',fechas[indexPar])), col= rev(terrain.colors(length(breaks))),  breaks =breaks,  axes=FALSE,
+           horizontal = TRUE, box=FALSE)
+    hist(n,
+         xlab = "NDVI",
+         ylab= "Frequency",
+         main=NULL,
+         col = "wheat",
+         #xlim = c(minNDVI,maxNDVI),
+         xaxt = 'n')
+    axis(side=1, at = seq(-1,1, 0.1), labels = seq(-1,1, 0.1))
+    
+    
+      
+  }
+  
+  else if (indexPar==1) {
+     plot(lst_reclassification_list[[indexPar]],col = rev(heat.colors(12)), 
+          legend.args = list(paste(text='LST (ºC) ',fechas[indexPar])),
+          axes=FALSE, horizontal = TRUE)
+     
+      plot(n,col = rev(terrain.colors(10)), legend.args = 
+           list(paste(text='NDVI ',fechas[indexPar])), 
+           axes=FALSE, horizontal = TRUE)
+  }
+  indexPar <- indexPar +1
+}
+```
+
+
+
+
+```{r dai_pixels, echo=FALSE,  fig.show="hold", out.width="50%"}
+
+ #Calculate DAI raster layer list with pixel DAI values for every image
+DAIPixelsList <- c()
+
+F <- function(x) 1 - tanh(x) / tanh(1)
+#F <- function(x) ifelse(x < 0, 1, 1 - tanh(x) / tanh(1))
+
+G <- function(x) tanh(x)
+
+
+
+for (i in 1:length(ndvi_list)) {
+  
+  ndviImg <- ndvi_list[[i]]
+  lstImg <- lst_reclassification_list[[i]]
+  
+  lst_m <- mean(na.omit ((lst_reclassification_list[[i]] [ndvi_list[[i]]>0])) )
+  lst_sd <- sd(na.omit ((lst_reclassification_list[[i]] [ndvi_list[[i]]>0])) ) 
+    
+  #DAIImage <- (log(1/ndviImg))  * ((lstImg-lst_m) / lst_sd)
+  
+  DAIImage <- F(ndviImg) * G ((lstImg-lst_m) / lst_sd)
+  
+  if (i==1) {
+    DAIValuesDF <- (DAIImage [!is.na (DAIImage)])
+  }
+  else {
+    valuesDAIForImage <- DAIImage [!is.na (DAIImage)]
+    DAIValuesDF <- append(DAIValuesDF,valuesDAIForImage)
+  }
+  
+  DAIImage [DAIImage < -1] <- -1
+  DAIImage [DAIImage > 1] <- 1
+  
+  DAIPixelsList[[i]] <- DAIImage
+  
+  
+}
+```
+
+
+
+
+
+
+```{r pixelClustering, include=FALSE, error=TRUE,   out.width="50%"}
+
+# PIXEL CLUSTERING PREPARATION DF WITH NORMALIZED LST/NDVI
+
+lst_tippified_raster_list_pixel <- c()
+ndvi_tippified_raster_list_pixel <- c()
+
+for (i in 1:length(ndvi_list)) {
+  
+  ndviImgTotm <- mean (na.omit(values (ndvi_list[[i]])))
+  lstImgTotm <- mean (na.omit(values (lst_reclassification_list[[i]])))
+  lstImgTotsd <- sd (na.omit(values (lst_reclassification_list[[i]])))
+  ndviImgTotsd <- sd (na.omit(values (ndvi_list[[i]])))
+  
+  ndviI <- ndvi_list[[i]]
+  lstI <- lst_reclassification_list[[i]]
+  ndviTip <- (ndviI-ndviImgTotm)/ndviImgTotsd   
+  lstTip <- (lstI-lstImgTotm)/lstImgTotsd
+  
+  lst_tippified_raster_list_pixel <- append (lst_tippified_raster_list_pixel,lstTip)
+  ndvi_tippified_raster_list_pixel <- append (ndvi_tippified_raster_list_pixel,ndviTip)
+  
+  if (i==1) {
+    lstPixelDF <- as.data.frame(values(lstTip))
+    ndviPixelDF <- as.data.frame(values(ndviTip))
+    dfForPixelClustering  <- cbind (lstPixelDF,ndviPixelDF,i)
+    names(dfForPixelClustering) <- c("lst","ndvi","image")
+  }
+  
+  else {
+     lstPixelDF <- as.data.frame(values(lstTip))
+     ndviPixelDF <- as.data.frame(values(ndviTip))
+     duo <- cbind(lstPixelDF,ndviPixelDF,i)
+     names (duo) <- c("lst","ndvi","image")
+     dfForPixelClustering  <- rbind (dfForPixelClustering,duo)
+  }
+  
+}
+
+
+```
+
+
+
+
+
+```{r hopkins, include=FALSE, message = FALSE}
+
+#check optimal number of clusters for NDVI/LST pixel clustering
+
+        dfWithLSTAndNDVI <- dfForPixelClustering %>%
+  select(lst,ndvi)
+
+        arrayWithBestNClusterForRound <- c()
+        
+      
+
+        for (i in 1:3) {
+          naOmit <- na.omit(dfWithLSTAndNDVI)
+          randomSampling <- naOmit[sample(nrow(naOmit), 1000), ]
+          if (i==1) {
+            
+            #res <- get_clust_tendency(randomSampling, n = nrow(randomSampling)-1,
+                                      #graph = FALSE)
+    
+            #hopkinsIndex <- res$hopkins_stat
+            
+            #print(paste("Hopkins index:",hopkinsIndex))
+          }
+             res.nbclust <- NbClust(randomSampling, distance = "euclidean",
+                           min.nc = 2, max.nc = 5, 
+                           method = "kmeans", index ="all")
+        
+             #get proposed as best number of cluster
+             bestNumberOfCluster <- max(unlist(res.nbclust[4]))
+             
+             arrayWithBestNClusterForRound[i] <- bestNumberOfCluster
+      
+
+            print (paste("best  number purposed by Nbclust in round:", i,":", bestNumberOfCluster))
+          
+          
+          
+         
+          
+          
+        }
+        
+         moreVoted <- arrayWithBestNClusterForRound[which.max(table(arrayWithBestNClusterForRound))]
+          
+        
+    
+       
+
+        
+      #best number of cluster selected
+      bestNCluster <- moreVoted
+```
+
+
+
+
+
+
+
+
+```{r function_pinta_capas, include=FALSE, error=TRUE,   out.width="50%"}
+pinta_capa <- function(capa_a_pintar,name="") {
+
+ capa_pts <- rasterToPoints(capa_a_pintar, spatial = TRUE)
+# Then to a 'conventional' dataframe
+capa_df <- data.frame(capa_pts)
+capa_df <- cbind(capa_df, alpha = 1)
+ggplot() +
+geom_raster(data = capa_df ,
+aes(x = x,
+y = y,
+fill = layer)) +
+guides(fill = guide_colorbar(title = name)) +
+#scico::scale_fill_scico(palette = "vikO") +
+scale_fill_gradientn(colours = wes_palette("Zissou1", 10, type = "continuous"))+
+theme_void()
+}
+
+pinta_capas_compuestas <- function(capa_a_pintar, ortho,name="") {
+  
+  plotRGB(ortho)
+
+ capa_pts <- rasterToPoints(capa_a_pintar, spatial = TRUE)
+ capa_pts_ortho <- rasterToPoints(ortho$LC08_L1TP_202034_20200828_20200905_01_T1_B4, spatial = TRUE)
+# Then to a 'conventional' dataframe
+capa_df <- data.frame(capa_pts)
+capa_df <- cbind(capa_df, alpha = 1)
+capa_df_ortho <- data.frame(capa_pts_ortho)
+capa_df_ortho <- cbind(capa_df_ortho, alpha = .5)
+ggplot() +
+# geom_raster(data = capa_df , 
+# aes(x = x,
+# y = y,
+# fill = layer)) +
+
+geom_raster(data = capa_df_ortho ,
+aes(x = x,
+y = y,
+fill = layer))  +
+  
+guides(fill = guide_colorbar(title = name)) +
+#scico::scale_fill_scico(palette = "vikO") +
+scale_fill_gradientn(colours = myColor)+
+theme_void()
+}
+
+#legend=led
+
+
+```
+
+
+```{r k_m_pixel, include=FALSE, error=TRUE,   out.width="50%"}
+   
+
+    # It is important to set the seed generator because `kmeans`
+    #initiates the centers in random locations
+ 
+    # We want to create bestNCluster clusters, allow 500 iterations, 
+    #start with 5 random sets using "Lloyd" method , algorithm="Lloyd"
+
+
+    kmncluster <- kmeans(na.omit(dfWithLSTAndNDVI),
+                         centers = bestNCluster, iter.max =  1000, nstart =10, algorithm = "Lloyd")
+    
+    
+    # Añadimos a cada pixel de cada imagen, el valor del cluster asignado
+    DFWithCluster <- cbind(na.omit(dfForPixelClustering),
+                           as.data.frame(kmncluster$cluster))
+    
+
+    names(DFWithCluster)[4] <- "CLUSTER"
+    
+ 
+  
+```
+
+
+```{r image_pixel_clusters, include=TRUE, error=TRUE,   out.width="50%"}
+
+#Create raster images list with clusters assigned for image's pixels
+clusteredPixelsImages <- list ()
+
+ for (i in 1:length(ndvi_list)) {
+   #get image
+   imgClusteredPixels <- DFWithCluster%>%
+     filter (image==i)
+   
+   imgRaster <- ndvi_list[[i]]
+   imgRaster[!is.na(imgRaster)] <- imgClusteredPixels$CLUSTER
+   #plot (imgRaster,col=heat.colors(3))
+   clusteredPixelsImages[[i]] <- imgRaster
+   
+ }
+
+```
+
+
+
+
+## DAI, clusters, and disfavourable map
+
+
+```{r plot_K_MEANS__, echo=FALSE, warning = FALSE, out.width="50%", results = 'asis'}
+
+  # Plot kmeans, dai, and disfauvorable map for image
+
+  # Set cluster color
+
+  dfIMG1 <- data.frame (DAI=as.vector(DAIPixelsList[[1]]),CLUSTER=as.vector(clusteredPixelsImages[[1]]))
+
+  summaryForColor <- dfIMG1 %>% group_by(CLUSTER) %>% summarise(MEDIANA=median(DAI,na.rm=TRUE))
+
+maximo <- max (na.omit(summaryForColor$MEDIANA)) 
+
+minimo <- min (na.omit(summaryForColor$MEDIANA)) 
+
+maxPosition <- which(na.omit(summaryForColor$MEDIANA) %in% c(maximo))
+
+minPosition <- which(na.omit(summaryForColor$MEDIANA) %in% c(minimo))
+
+paletteCommon <- wes_palette("Zissou1", 10, type = "continuous")
+
+myColor <- c(1:bestNCluster)
+
+for (colorIndex in 1:length(myColor)) {
+  myColor[colorIndex] <- paletteCommon[6]
+}
+
+myColor [[maxPosition]] <- paletteCommon[10]
+
+myColor [[minPosition]] <- paletteCommon[1]
+  
+
+  ind <- 1
+ 
+ totalImagesNumber = length(DAIPixelsList)
+  
+  #par(mfrow = c(4,4)) #8x
+  
+  if (!allImages) {
+    totalImagesNumber = 1;
+  }
+ 
+ 
+  #Create df with pixel values,lst,ndvi,dai,cluster (dffull)
+ 
+ for (imageNumbers in 1:totalImagesNumber ) {
+   
+   if (imageNumbers==1) {
+     dfFull<- data.frame(DAI=as.vector(DAIPixelsList[[1]]),CLUSTER=as.vector(clusteredPixelsImages[[1]]),IM_ID=imageNumbers )
+   }
+   
+   else {
+    dfIMG_ <- data.frame(DAI=as.vector(DAIPixelsList[[imageNumbers]]),CLUSTER=as.vector(clusteredPixelsImages[[imageNumbers]]),IM_ID=imageNumbers)
+    dfFull <- rbind (dfFull,dfIMG_)
+   }
+   
+ }
+ 
+ #imagen con menos áreas desfavorables (la que menos pixeles tiene en el cluster de desfavorables)
+ 
+ sumNumberOfPixelOfClusDisfForImg <- dfFull %>% filter (CLUSTER==2) %>% group_by(IM_ID) %>% summarise(n = n())
+ 
+ posMaxVal <- which (min(sumNumberOfPixelOfClusDisfForImg$n) == sumNumberOfPixelOfClusDisfForImg$n)
+  
+ #index for image with low number of pixels belong to disfauvorable cluster
+ imageWithLowDisfavourableAreas <- posMaxVal
+ 
+  par(mfrow = c(1,1))
+  
+  #Legend fpr clusters
+  led = c(1:bestNCluster)
+  
+  for (ledIndex in 1:bestNCluster) {
+    led[ledIndex] <- paste ("cluster ",ledIndex, ": favourable areas")
+  }
+  
+  led [maxPosition] <- paste ("cluster ",maxPosition, ": disfavourable areas")
+  led [minPosition] <- paste ("cluster ",minPosition, ": more favourable areas")
+  
+  if (bestNCluster==3) {
+    
+  }
+  
+  
+  
+  # for every image
+  for (img in 1:totalImagesNumber ) {
+    
+  if (img == imageWithLowDisfavourableAreas) { # if image is the image with less disf. areas
+    
+    
+    #clusters
+    
+     #print(pinta_capa_clusters(clusteredPixelsImages[[imageWithLowDisfavourableAreas]]) )
+
+        print(plot(clusteredPixelsImages[[imageWithLowDisfavourableAreas]], axes=FALSE,legend=FALSE, col = myColor, horizontal = TRUE, box=FALSE))
+    legend("bottom", legend = led,col = myColor,
+           bestNCluster, bty = "n", xpd=TRUE, cex=.7, pch=16, pt.cex = 1, inset=c(0,-0.6))
+
+    #DAI
+   print(pinta_capa(DAIPixelsList[[imageWithLowDisfavourableAreas]],"DAI") )
+    
+    
+    # DAI belong to worst cluster
+    DAICorrected <- DAIPixelsList
+    #Asignamos -1 a los pixeles del DAI diferentes al cluster 2
+    DAICorrected[[imageWithLowDisfavourableAreas]] [clusteredPixelsImages[[imageWithLowDisfavourableAreas]]!=maxPosition] <- NA
+    
+    #total disfavourable area
+    
+    #daivalues <- DAIPixelsList[[imageWithLowDisfavourableAreas]]!=-1
+    
+    daivalues <- DAICorrected[[imageWithLowDisfavourableAreas]][DAICorrected[[imageWithLowDisfavourableAreas]]!=-1]
+    
+    moreDisfPixels <- length(daivalues)
+    
+    totalDisfArea <- (moreDisfPixels*30*30)/1000000
+    
+    #plot disfavourable areas
+    
+    imgToPlot <- DAICorrected[[imageWithLowDisfavourableAreas]]
+    
+    legenda <- paste("Disf.area:",round(totalDisfArea,2),"km2")
+    
+    #print(plot(imgToPlot, landsatRGB) )
+    
+    
+    
+     print(plotRGB(landsatRGB,  stretch="lin", scale=800, main="My Title"  ))
+      # legend("bottom", legend = legenda,col = "white",
+      #      bestNCluster, bty = "n", xpd=TRUE, cex=.7, pch=16, pt.cex = 1, inset=c(0,-0.6))
+      # 
+     
+     legend("topright", legend = NA, title =(legenda), bty = "n", cex = 1)
+     
+     pal <- colorRampPalette(c(rgb(1,1,0,0.6),rgb(1,0,0,0.6)), alpha=TRUE)(10)
+    
+     print(plot(imgToPlot, axes=FALSE,legend=FALSE, col = pal, horizontal = TRUE, box=FALSE, add=TRUE, legend.outside = TRUE,
+                legend.args=list(text='DAI', side=4, font=2, line=2.5, cex=0.8)))
+     
+     palNoTransp <- colorRampPalette(c(rgb(1,1,0,1),rgb(1,0,0,1)), alpha=TRUE)(10)
+     
+       print(plot(imgToPlot, legend.only=TRUE, axes=FALSE,legend=TRUE, col = palNoTransp, horizontal = TRUE, box=FALSE, add=TRUE, legend.outside = TRUE,
+                legend.args=list(text='DAI', side=1, font=2, line=2, cex=0.8)))
+     
+   
+     
+     
+     ndviThresoldForAreas <- as.data.frame(reclasifyNDVIList [[imageWithLowDisfavourableAreas]],na.rm=TRUE)
+     
+     names (ndviThresoldForAreas) <- c("type")
+     
+     dfFinalForAreas <- ndviThresoldForAreas %>% mutate(elemtType = case_when(
+                                   type == 1 ~ "water", 
+                                   type == 2 ~ "non_veg",
+                                   type == 3 ~ "low_veg",
+                                   type == 4 ~ "mod_veg",
+                                   type == 5 ~ "dense_veg",
+                                    )
+                               )
+     
+     #ndviThresoldForAreas[ndviThresoldForAreas==1]
+     
+     resultsForAreas <- dfFinalForAreas %>% group_by(elemtType) %>% summarise(km2 = n()*30*30/1000000)
+     
+     proportionAreas <- resultsForAreas %>% mutate (percentArea = km2/sum(km2)*100)
+     
+     totalKm2ForCity <- round(sum(resultsForAreas$km2),2)
+     
+     
+     dfDisfAreasFinal <- data.frame(elemtType="disfavourable",
+                                    km2=round(totalDisfArea,2),  percentArea=round(totalDisfArea,2)/totalKm2ForCity*100)
+    
+     
+         #print(plot (disfareas,axes=FALSE, legend=FALSE, horizontal = TRUE,
+               #box=FALSE )  )
+         totalRow <- data.frame ("totalCityArea",sum(resultsForAreas$km2),100)
+         names(totalRow) <- c("elemtType","km2","percentArea")
+    
+    proportionAreas <- rbind (proportionAreas,totalRow)
+    
+    proportionAreas <- rbind (proportionAreas,dfDisfAreasFinal)
+    
+    proportionAreas <- data.frame(lapply(proportionAreas,    
+                   function(x) if(is.numeric(x)) round(x, 1) else x))
+    
+    print(kable(proportionAreas))
+    
+    write.csv(proportionAreas,paste(cityName,".csv",sep=""))
+    
+  } #if image
+  
+  } #for
+  
+
+ 
+
+```
+
+
+
+```{r DAI_K_MEANS_RELATION, include=TRUE, echo=FALSE, results='new_index_plot'}
+
+  
+    cluster <- as.factor(dfFull$CLUSTER)
+    p <- ggplot(dfFull[1:2], aes(x=DAI, fill=cluster) ) +
+      geom_density(alpha=0.4) + theme_minimal() +
+      scale_fill_manual(values=myColor[1:bestNCluster])  
+  
+    print (p)
+    # geom_text(aes(x=2,y=0,label = paste("PDAI=",quantile_*100,"%",sep=""),
+    #               vjust = -1))
+    #print (p3)
+    
+
+  
+
+```
+
+
+
+
+## LST and NDVI relation
+
+
+```{r rtabla_df, echo=FALSE, results='asis'}
+
+item <- 1
+
+
+
+#Componemos un df con todos los pares lst,ndvi de todas las imágenes
+
+for (t in temp11_list) {
+  
+   nd <- ndvi_list[[item]]
+  
+  matrix <- cbind(values(t),values(nd))
+
+  df <- as.data.frame(matrix)
+  x <- c("lst_value","ndvi_value")
+  colnames(df) <- x
+  
+  df <- df %>%
+    filter (ndvi_value>=0)
+  
+
+  
+  #Remove outliers
+  
+  outli <- boxplot(df$lst_value,plot=FALSE)$out
+  df$lst_value[df$lst_value %in% outli]  <- NA
+  outli <- boxplot(df$ndvi,plot=FALSE)$out
+  df$ndvi_value[df$ndvi_value %in% outli]  <- NA
+  
+  if (item==1) {
+    dfTotalImagesLSTNDVI <- df
+  }
+  
+  else {
+    dfTotalImagesLSTNDVI <- rbind (dfTotalImagesLSTNDVI,df)
+  }
+  
+  item <- item + 1
+  
+}
+
+  
+  # df_filter <- df %>%
+  #   filter ( (!is.na(ndvi_value)) & (ndvi_value>=0.2) & 
+  #              (ndvi_value<1) & (!is.na(lst_value)) & (!is.nan(ndvi_value)) &
+  #              (!is.nan(lst_value))   ) %>%
+  #   arrange(desc(lst_value))
+  # 
+  # rm (df)
+  # 
+
+  
+  #df_ <- top_n(df_filter, n = 10000, lst_value)
+  
+  #uncomment for plot all df
+  
+  sample <- dfTotalImagesLSTNDVI[sample(nrow(dfTotalImagesLSTNDVI), 100000), ] 
+
+  b <- ggplot(dfTotalImagesLSTNDVI[1:10000,], aes(x = ndvi_value, y = lst_value)) +
+   geom_point(color = "indianred1", size = 0.0002)+
+  #geom_smooth(method = "loess", color= "lightgreen")
+  geom_smooth(method='lm') +
+    stat_regline_equation(label.y = max(na.omit(dfTotalImagesLSTNDVI$lst_value)), aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = max(na.omit(dfTotalImagesLSTNDVI$lst_value))-3, aes(label = ..rr.label..))
+  plot (b)
+
+
+
+#rm (pl)
+
+```
+
