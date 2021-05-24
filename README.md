@@ -1,100 +1,82 @@
-# Título del Proyecto
+# URSUS_UHI
 
-_Acá va un párrafo que describa lo que es el proyecto_
+URSUS_UHI is a tool for the automatic detection of the most disadvantaged areas due to the urban heat island effect (UHI). 
 
-## Comenzando 🚀
+### Requirements📋
 
-_Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
+- R
+- RStudio
+- Landsat-8 satellite images of the city to be analized
 
-Mira **Deployment** para conocer como desplegar el proyecto.
+## How does it work? 🚀
+
+- Clone the repository on your local machine (git clone "https://github.com/ursusdm/URSUS_UHI.git"). 
+
+- For the correct operation of the tool, it is necessary:  
+ 
+  A) Create a **folder** called **data** that will contain the images of the cities to be analyzed
+  
+  B) Create a **folder with the name of the city** to be analyzed and add the Landsat-8 images inside data folder.  
+  
+  For example, to analyze the city of Malaga:  
+
+<img width="546" alt="Captura de pantalla 2021-05-24 a las 13 24 07" src="https://user-images.githubusercontent.com/68539118/119340823-52c83900-bc93-11eb-8b82-67f449a63c9a.png">
+
+<img width="291" alt="Captura de pantalla 2021-05-24 a las 13 22 03" src="https://user-images.githubusercontent.com/68539118/119340617-0977e980-bc93-11eb-82d9-bcae04b177d5.png"><img width="322" alt="Captura de pantalla 2021-05-24 a las 13 36 06" src="https://user-images.githubusercontent.com/68539118/119342208-0251db00-bc95-11eb-8e9c-43ec4af3bce3.png"><img width="822" alt="Captura de pantalla 2021-05-24 a las 13 38 10" src="https://user-images.githubusercontent.com/68539118/119342379-4b099400-bc95-11eb-92f7-c298c188b64d.png">
 
 
-### Pre-requisitos 📋
+  C) **Select cropping mode** of the area of interest (manual / interactive) and run script:  
+  
+  The next step will be to open one of the two attached scripts with RStudio.  
+  
+- The **interactive_cropping** script allows you to select the area of interest by drawing a rectangle on the map of satellite images that cover the study city.  
 
-_Que cosas necesitas para instalar el software y como instalarlas_
+- The **cropping_by_coordinates** script allows you to manually enter the coordinates of the area of interest.    
 
-```
-Da un ejemplo
-```
+For example, to analyze the city of Malaga using cropping_by_coordinates script setting the coordinates of area of interest manually, open the script with RStudio, set the cityName variable to "MALAGA", and set the area of interest coordinates :  
 
-### Instalación 🔧
+<img width="1115" alt="Captura de pantalla 2021-05-24 a las 14 18 08" src="https://user-images.githubusercontent.com/68539118/119346736-e4877480-bc9a-11eb-8e75-cb73e5393b49.png">
 
-_Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrollo ejecutandose_
 
-_Dí cómo será ese paso_
+<img width="1121" alt="Captura de pantalla 2021-05-24 a las 13 53 29" src="https://user-images.githubusercontent.com/68539118/119344010-71303380-bc97-11eb-8d0c-9ff7a93d330f.png">
 
-```
-Da un ejemplo
-```
+- **Run script**. You can run the script to get a pdf report. <img width="439" alt="Captura de pantalla 2021-05-24 a las 14 13 38" src="https://user-images.githubusercontent.com/68539118/119346251-44315000-bc9a-11eb-8b1a-b80d9756e44a.png"> or you can run all chunks on RStudio in case you need higher quality images. <img width="370" alt="Captura de pantalla 2021-05-24 a las 14 25 13" src="https://user-images.githubusercontent.com/68539118/119347470-ddad3180-bc9b-11eb-85ca-3499d56515b2.png">
 
-_Y repite_
+- **pdf generated from the study of Málaga with manual coordinates**. [cropping_coordenadas.pdf](https://github.com/ursusdm/URSUS_UHI/files/6532303/cropping_coordenadas.pdf)
 
-```
-hasta finalizar
-```
 
-_Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
+- Results availables from pdf or from run chunks are: 
+ 
+A) A map with a cluster for more disfavourable areas. 
 
-## Ejecutando las pruebas ⚙️
+B) A map with pixel DAI values (-1(more favourable) +1 (more disfavourable) ). 
 
-_Explica como ejecutar las pruebas automatizadas para este sistema_
+C) A map with pixel DAI values for more disfavourable cluster.  
 
-### Analice las pruebas end-to-end 🔩
+<img width="637" alt="Captura de pantalla 2021-05-24 a las 14 23 22" src="https://user-images.githubusercontent.com/68539118/119348248-e4887400-bc9c-11eb-85fb-630357c38843.png">
 
-_Explica que verifican estas pruebas y por qué_
-
-```
-Da un ejemplo
-```
-
-### Y las pruebas de estilo de codificación ⌨️
-
-_Explica que verifican estas pruebas y por qué_
-
-```
-Da un ejemplo
-```
-
-## Despliegue 📦
-
-_Agrega notas adicionales sobre como hacer deploy_
 
 ## Construido con 🛠️
 
-_Menciona las herramientas que utilizaste para crear tu proyecto_
+* [R](https://www.r-project.org/) - Programming language
+* [RStudio](https://www.rstudio.com/) -  IDE
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - El framework web usado
-* [Maven](https://maven.apache.org/) - Manejador de dependencias
-* [ROME](https://rometools.github.io/rome/) - Usado para generar RSS
-
-## Contribuyendo 🖇️
-
-Por favor lee el [CONTRIBUTING.md](https://gist.github.com/villanuevand/xxxxxx) para detalles de nuestro código de conducta, y el proceso para enviarnos pull requests.
-
-## Wiki 📖
-
-Puedes encontrar mucho más de cómo utilizar este proyecto en nuestra [Wiki](https://github.com/tu/proyecto/wiki)
-
-## Versionado 📌
-
-Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones disponibles, mira los [tags en este repositorio](https://github.com/tu/proyecto/tags).
 
 ## Autores ✒️
 
-_Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
-* **Andrés Villanueva** - *Trabajo Inicial* - [villanuevand](https://github.com/villanuevand)
-* **Fulanito Detal** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
+* **Francisco Rodríguez Gómez** 
+* **José del Campo Ávila** 
+* **Domingo López Rodríguez** 
+* **Luis Pérez Urrestarazu** 
 
-También puedes mirar la lista de todos los [contribuyentes](https://github.com/your/project/contributors) quíenes han participado en este proyecto. 
+ 
 
 ## Licencia 📄
 
 Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
 
-## Expresiones de Gratitud 🎁
+## Acknowledgements 🎁
 
-* Comenta a otros sobre este proyecto 📢
-* Invita una cerveza 🍺 o un café ☕ a alguien del equipo. 
-* Da las gracias públicamente 🤓.
-* etc.
+* This work has been supported by the project RTI2018-095097-B-I00 at the 2018 call for I+D+i Project of the Ministerio de Ciencia, Innovación y Universidades, Spain. Funding for open access charge: Universidad de Málaga / CBUA.
+
