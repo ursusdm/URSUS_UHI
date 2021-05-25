@@ -58,6 +58,9 @@ B) A map with pixel DAI values (-1(more favourable) +1 (more disfavourable) ).
 
 C) A map with pixel DAI values for more disfavourable cluster.  
 
+D) A table with disfavourable and urban element areas on % and km2.  
+
+
 <img width="637" alt="Captura de pantalla 2021-05-24 a las 14 23 22" src="https://user-images.githubusercontent.com/68539118/119348248-e4887400-bc9c-11eb-85fb-630357c38843.png">
 
 
