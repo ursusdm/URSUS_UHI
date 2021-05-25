@@ -857,50 +857,50 @@ for (i in 1:length(ndvi_list)) {
         dfWithLSTAndNDVI <- dfForPixelClustering %>%
   select(lst,ndvi)
 
-        arrayWithBestNClusterForRound <- c()
-
-        for (i in 1:3) {
-          
-           naOmit <- na.omit(dfWithLSTAndNDVI)
-          randomSampling <- naOmit[sample(nrow(naOmit), 1000), ]
-          
-          if (i==1) {
-            
-            #res <- get_clust_tendency(randomSampling, n = nrow(randomSampling)-1,
-                                      #graph = FALSE)
-    
-            #hopkinsIndex <- res$hopkins_stat
-            
-            #print(paste("Hopkins index:",hopkinsIndex))
-          }
-             res.nbclust <- NbClust(randomSampling, distance = "euclidean",
-                           min.nc = 2, max.nc = 5, 
-                           method = "kmeans", index ="all")
-        
-             #get proposed as best number of cluster
-             bestNumberOfCluster <- max(unlist(res.nbclust[4]))
-             
-             arrayWithBestNClusterForRound[i] <- bestNumberOfCluster
-      
-
-            print (paste("best  number purposed by Nbclust in round:", i,":", bestNumberOfCluster))
-          
-          
-          
-         
-          
-          
-        }
-        
-         moreVoted <- arrayWithBestNClusterForRound[which.max(table(arrayWithBestNClusterForRound))]
-          
-        
+        # arrayWithBestNClusterForRound <- c()
+        # 
+        # for (i in 1:3) {
+        #   
+        #    naOmit <- na.omit(dfWithLSTAndNDVI)
+        #   randomSampling <- naOmit[sample(nrow(naOmit), 1000), ]
+        #   
+        #   if (i==1) {
+        #     
+        #     #res <- get_clust_tendency(randomSampling, n = nrow(randomSampling)-1,
+        #                               #graph = FALSE)
+        # 
+        #     #hopkinsIndex <- res$hopkins_stat
+        #     
+        #     #print(paste("Hopkins index:",hopkinsIndex))
+        #   }
+        #      res.nbclust <- NbClust(randomSampling, distance = "euclidean",
+        #                    min.nc = 2, max.nc = 5, 
+        #                    method = "kmeans", index ="all")
+        # 
+        #      #get proposed as best number of cluster
+        #      bestNumberOfCluster <- max(unlist(res.nbclust[4]))
+        #      
+        #      arrayWithBestNClusterForRound[i] <- bestNumberOfCluster
+        # 
+        # 
+        #     print (paste("best  number purposed by Nbclust in round:", i,":", bestNumberOfCluster))
+        #   
+        #   
+        #   
+        #  
+        #   
+        #   
+        # }
+        # 
+        #  moreVoted <- arrayWithBestNClusterForRound[which.max(table(arrayWithBestNClusterForRound))]
+        #   
+        # 
     
        
 
         
       #best number of cluster selected
-      bestNCluster <- moreVoted
+      bestNCluster <- 3
 ```
 
 
