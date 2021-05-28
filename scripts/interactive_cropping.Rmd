@@ -672,6 +672,8 @@ for (n in ndvi_list) {
     array_with_existing_urban_class <- 
     append (array_with_existing_urban_class,"Dense vegetation")
   
+  colorClassify <- c ("cadetblue2","#EEB99F","lightgreen","green2","green3")
+  
   
   tar[["landcover"]]<-array_with_existing_urban_class
   levels(myraster)<-tar
@@ -681,7 +683,7 @@ for (n in ndvi_list) {
                        par.settings = list(axis.line = list(col = "transparent")),
                       scales=list(draw=FALSE), legend.args =
                       list(paste (fechas[counter_ndvi],"Urban area classification") ),
-                      col.regions=rev(terrain.colors(5))) )
+                      col.regions=colorClassify) )
   }
   
   else if (counter_ndvi ==1) {
@@ -1220,15 +1222,13 @@ if (executeGetDai) {
 ```{r DAI_K_MEANS_RELATION, include=TRUE, echo=FALSE, results='new_index_plot'}
 
   
-    cluster <- as.factor(dfFull$CLUSTER)
-    p <- ggplot(dfFull[1:2], aes(x=DAI, fill=cluster) ) +
+     naomitDF <- na.omit (dfFull)
+    cluster <- as.factor(naomitDF$CLUSTER)
+    p <- ggplot(naomitDF[1:2], aes(x=DAI, fill=cluster,y = ..scaled..) ) +
       geom_density(alpha=0.4) + theme_minimal() +
-      scale_fill_manual(values=myColor[1:bestNCluster]) 
+      scale_fill_manual(values=myColor[1:bestNCluster])  
   
     print (p)
-    # geom_text(aes(x=2,y=0,label = paste("PDAI=",quantile_*100,"%",sep=""),
-    #               vjust = -1))
-    #print (p3)
     
 
   
