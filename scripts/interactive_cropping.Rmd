@@ -1249,7 +1249,7 @@ item <- 1
 
 #Componemos un df con todos los pares lst,ndvi de todas las imágenes
 
-for (t in temp11_list) {
+for (t in lst_reclassification_list) {
   
    nd <- ndvi_list[[item]]
   
@@ -1260,7 +1260,7 @@ for (t in temp11_list) {
   colnames(df) <- x
   
   df <- df %>%
-    filter (ndvi_value>=0)
+    filter (ndvi_value>0)
   
 
   
@@ -1270,6 +1270,11 @@ for (t in temp11_list) {
   df$lst_value[df$lst_value %in% outli]  <- NA
   outli <- boxplot(df$ndvi,plot=FALSE)$out
   df$ndvi_value[df$ndvi_value %in% outli]  <- NA
+  
+  
+  df <- na.omit (df)
+  
+  df <- arrange(df,ndvi_value)
   
   if (item==1) {
     dfTotalImagesLSTNDVI <- df
@@ -1298,10 +1303,10 @@ for (t in temp11_list) {
   
   #uncomment for plot all df
   
-  sample <- dfTotalImagesLSTNDVI[sample(nrow(dfTotalImagesLSTNDVI), 100000), ] 
+  #sample <- dfTotalImagesLSTNDVI[sample(nrow(dfTotalImagesLSTNDVI), 100000), ] 
 
-  b <- ggplot(dfTotalImagesLSTNDVI[1:10000,], aes(x = ndvi_value, y = lst_value)) +
-   geom_point(color = "indianred1", size = 0.0002)+
+  b <- ggplot(dfTotalImagesLSTNDVI, aes(x = ndvi_value, y = lst_value)) +
+   geom_point(color = "indianred1", size = 0.0001)+
   #geom_smooth(method = "loess", color= "lightgreen")
   geom_smooth(method='lm') +
     stat_regline_equation(label.y = max(na.omit(dfTotalImagesLSTNDVI$lst_value)), aes(label = ..eq.label..)) +
@@ -1311,6 +1316,5 @@ for (t in temp11_list) {
 
 
 #rm (pl)
-
 ```
 

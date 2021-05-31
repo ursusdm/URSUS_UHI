@@ -60,7 +60,7 @@ library(RColorBrewer)
 
 ```{r set, include=FALSE}
 # Set folder with LANDSAT city images 
-cityName <- "MALAGA"
+cityName <- "BILBAO"
 getwd()
 dataFiles <- paste("../data/",cityName, sep = "")
 files<-list.files(path=dataFiles, full.names = TRUE)
@@ -72,7 +72,7 @@ set.seed(1234)
 
 
 #MALAGA
-coordsMatrix = as.data.frame(matrix(rev(c(36.6608,-4.4586,36.7307,-4.5776,36.7419,-4.5507,36.7197,-4.5284,36.7244,-4.5044,36.7496,-4.4942,36.7515,-4.4784,36.7324,-4.4605,36.7384,-4.4524,36.7437,-4.4303,36.7613,-4.4242,36.7373,-4.4050,36.741,-4.3807,36.7223,-4.3384,36.7135,-4.3418,36.7171,-4.3618,36.7015,-4.4121)),ncol=2,byrow=TRUE))
+# coordsMatrix = as.data.frame(matrix(rev(c(36.6608,-4.4586,36.7307,-4.5776,36.7419,-4.5507,36.7197,-4.5284,36.7244,-4.5044,36.7496,-4.4942,36.7515,-4.4784,36.7324,-4.4605,36.7384,-4.4524,36.7437,-4.4303,36.7613,-4.4242,36.7373,-4.4050,36.741,-4.3807,36.7223,-4.3384,36.7135,-4.3418,36.7171,-4.3618,36.7015,-4.4121)),ncol=2,byrow=TRUE))
 
 #SEVILLA
 # coordsMatrix = as.data.frame(matrix(rev(c(37.3672222,-6.01416667,37.3480556,-5.99138889,37.3425,-5.98444444,37.34,-5.97527778,37.3422222,-5.96833333,37.3541667,-5.95944444,37.3619444,-5.93722222,37.3633333,-5.91555556,37.3647222,-5.90277778,37.3588889,-5.88916667,37.3561111,-5.88277778,37.3622222,-5.87333333,37.3694444,-5.8725,37.3769444,-5.87694444,37.3802778,-5.88638889,37.3819444,-5.89027778,37.3905556,-5.90666667,37.3952778,-5.91583333,37.405,-5.91027778,37.4105556,-5.915,37.4133333,-5.92277778,37.4138889,-5.93166667,37.4091667,-5.9475,37.4158333,-5.95055556,37.4238889,-5.95111111,37.4252778,-5.96194444,37.435,-5.96722222,37.4358333,-5.97333333,37.4233333,-6.00722222,37.3802778,-6.01444444)),ncol=2,byrow=TRUE))
@@ -88,6 +88,24 @@ coordsMatrix = as.data.frame(matrix(rev(c(36.6608,-4.4586,36.7307,-4.5776,36.741
 # 39.5027, -0.3916,
 # 39.4945, -0.3578,
 # 39.4887, -0.3231 )),ncol=2,byrow=TRUE))
+
+
+#BILBAO
+
+coordsMatrix = as.data.frame(matrix(rev(c(43.2458333333333,-2.91194444444444,
+43.2458333333333,-2.90416666666667,
+43.2522222222222,-2.89666666666667,
+43.2508333333333,-2.90083333333333,
+43.2569444444444,-2.89388888888889,
+43.2594444444444,-2.89361111111111,
+43.2716666666667,-2.92138888888889,
+43.2758333333333,-2.94555555555556,
+43.29,-2.97027777777778,
+43.2769444444444,-2.97638888888889,
+43.2688888888889,-2.97388888888889,
+43.2469444444444,-2.94833333333333,
+43.245,-2.92972222222222
+)),ncol=2,byrow=TRUE))
 
 
 #BARNA
@@ -801,7 +819,7 @@ for (n in ndvi_list) {
 
 indexPar <- 1
 
-par(mfrow = c(2,2))
+par(mfrow = c(1,2))
 
 for (n in ndvi_list) {
   
@@ -1344,7 +1362,7 @@ item <- 1
 
 #Componemos un df con todos los pares lst,ndvi de todas las imágenes
 
-for (t in temp11_list) {
+for (t in lst_reclassification_list) {
   
    nd <- ndvi_list[[item]]
   
@@ -1355,7 +1373,7 @@ for (t in temp11_list) {
   colnames(df) <- x
   
   df <- df %>%
-    filter (ndvi_value>=0)
+    filter (ndvi_value>0)
   
 
   
@@ -1365,6 +1383,11 @@ for (t in temp11_list) {
   df$lst_value[df$lst_value %in% outli]  <- NA
   outli <- boxplot(df$ndvi,plot=FALSE)$out
   df$ndvi_value[df$ndvi_value %in% outli]  <- NA
+  
+  
+  df <- na.omit (df)
+  
+  df <- arrange(df,ndvi_value)
   
   if (item==1) {
     dfTotalImagesLSTNDVI <- df
@@ -1393,10 +1416,10 @@ for (t in temp11_list) {
   
   #uncomment for plot all df
   
-  sample <- dfTotalImagesLSTNDVI[sample(nrow(dfTotalImagesLSTNDVI), 100000), ] 
+  #sample <- dfTotalImagesLSTNDVI[sample(nrow(dfTotalImagesLSTNDVI), 100000), ] 
 
-  b <- ggplot(dfTotalImagesLSTNDVI[1:10000,], aes(x = ndvi_value, y = lst_value)) +
-   geom_point(color = "indianred1", size = 0.0002)+
+  b <- ggplot(dfTotalImagesLSTNDVI, aes(x = ndvi_value, y = lst_value)) +
+   geom_point(color = "indianred1", size = 0.0001)+
   #geom_smooth(method = "loess", color= "lightgreen")
   geom_smooth(method='lm') +
     stat_regline_equation(label.y = max(na.omit(dfTotalImagesLSTNDVI$lst_value)), aes(label = ..eq.label..)) +
