@@ -11,6 +11,10 @@ a) Download a Landsat-8 image of the city of interest
 
 b) Cropping the area of ​​interest interactively on the map
 
+c) Cropping the area of ​​interest interactively on the map
+
+d) Show results
+
 ## Download a Landsat-8 image of the city of interest
 
 To download Landsat-8 images of the cities of study interest, we can do so for free from the site https://earthexplorer.usgs.gov/ following the instructions shown in the screenshots:
