@@ -1,6 +1,8 @@
 # URSUS_UHI
 
-ursus_uhi is a intelligent tool for the automatic determination of the urban areas most disadvantaged by the urban heat island effect.
+<img width="1259" alt="Captura de pantalla 2021-05-24 a las 20 30 07" src="https://user-images.githubusercontent.com/68539118/119391636-e1a67700-bcce-11eb-9b01-42cafffdbf31.png">
+
+URSUS_UHI is a intelligent tool for the automatic determination of the urban areas most disadvantaged by the urban heat island effect.
 
 ursus_uhi is a tool for the automatic determination of the urban areas most disadvantaged by the urban heat island effect.
 The operation of the system is very simple:
@@ -9,25 +11,26 @@ a) Download a Landsat-8 image of the city of interest
 
 b) Cropping the area of ​​interest interactively on the map
 
-<img width="1259" alt="Captura de pantalla 2021-05-24 a las 20 30 07" src="https://user-images.githubusercontent.com/68539118/119391636-e1a67700-bcce-11eb-9b01-42cafffdbf31.png">
-
-### Download a Landsat-8 image of the city of interest
+## Download a Landsat-8 image of the city of interest
 
 To download Landsat-8 images of the cities of study interest, we can do so for free from the site https://earthexplorer.usgs.gov/ following the instructions shown in the screenshots:
 
- **select the city of study interest**
+### select the city of study interest
 
   <img width="433" alt="LAndsat-1" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a74b6766-cdaa-4675-a701-b59060bacbad">
 
   <img width="1679" alt="Landsat-2" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/90d187d2-1b39-4557-87cb-eb7e67a09c51">
 
- **select the satellite image type: LANDSAT-8**
+### Select the satellite image type: LANDSAT-8
 
  <img width="430" alt="Landsat-3" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ad8dd8ec-d57c-4e12-a74f-1e90b8a4b9b9">
 
- **visualize results**
+### Visualize results
 
  <img width="1657" alt="Landsat-4" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2372d05e-2a2c-4a14-b004-92d989e8de6b">
+
+
+
 
 ### Requirements📋
 
