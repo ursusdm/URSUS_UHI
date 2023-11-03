@@ -32,6 +32,9 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 
  <img width="1657" alt="Landsat-4" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2372d05e-2a2c-4a14-b004-92d989e8de6b">
 
+### Download image
+
+<img width="934" alt="dwnld" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/22f10cd8-5942-4b99-ba4d-02961bc1fedd">
 
 
 
