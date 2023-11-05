@@ -2,17 +2,17 @@
 
 <img width="1259" alt="Captura de pantalla 2021-05-24 a las 20 30 07" src="https://user-images.githubusercontent.com/68539118/119391636-e1a67700-bcce-11eb-9b01-42cafffdbf31.png">
 
-URSUS_UHI is a tool for the automatic determination of the urban areas most disadvantaged by the urban heat island effect. 
+**URSUS_UHI** is a tool for the **automatic determination of the urban areas most disadvantaged by the urban heat island effect**. 
 
 The use of the tool is very simple, and consists of the following steps.
 
-a) Download a Landsat-8 image of the city of interest
+a) **Download** a **Landsat-8 image** of the city of interest
 
-b) Select a landsat-8 image from the city of interest
+b) **Select** a **landsat-8 image** 
 
-c) Cropping the area of ​​interest interactively on the map
+c) **Cropping** the **area of ​​interest** interactively on the map
 
-d) Show results
+d) **Show results**
 
 ## Download a Landsat-8 image of the city of interest
 
@@ -43,12 +43,14 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 - R
 - RStudio
 - renv
-  
-**Clone the repository** on your local machine (git clone "https://github.com/ursusdm/URSUS_UHI.git").
 
-**Open R proyect** file
+### Main Steps📋
   
-**Download dependencies and libraries using renv**
+- **Clone the repository** on your local machine (git clone "https://github.com/ursusdm/URSUS_UHI.git").
+
+- **Open R proyect** file
+  
+- **Download dependencies and libraries using renv**
 
 ## How does it work? 🚀
  
