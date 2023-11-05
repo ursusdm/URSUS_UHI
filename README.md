@@ -53,7 +53,9 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 
 - **Open R proyect** file
   
-- **Download dependencies and libraries using renv:**  renv::init() and app ready!
+- **Download dependencies and libraries using renv:**  renv::init(), renv::install() and app ready!
+
+- **update.packages** for update R packages
 
 ## How does it work? 🚀
  
