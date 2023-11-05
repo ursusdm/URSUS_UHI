@@ -17,6 +17,9 @@ library(leaflet)
 library(sf)
 library(leaflet.extras)
 library(shinydashboard)
+library(reshape2)
+
+
 
 # Define UI for application 
 ui <- dashboardPage(
@@ -118,6 +121,9 @@ server <- function(input, output, session) {
       # Reag landsat 8 satellite multiband and metadata from landsat 8 image
       multibandLayer <<- readMultibandRasterLayer(dirinfo)
       
+      #Read metadata file for LST calculation
+      metad <<- readMetadata(dirinfo)
+      
       extentCoordinatesLatLng <- utmToGPSExtent (multibandLayer[[1]])
       
       #Leflet map
@@ -134,6 +140,7 @@ server <- function(input, output, session) {
           addRectangles(
             lng1=extentCoordinatesLatLng[[1]][[1]], lat1=extentCoordinatesLatLng[[2]][[1]],
             lng2= extentCoordinatesLatLng[[1]][[2]], lat2=extentCoordinatesLatLng[[2]][[2]],
+            color = "red",
             fillColor = "transparent"
           ) %>%
           
@@ -170,7 +177,6 @@ server <- function(input, output, session) {
     # read coords from polygon cropped area
     coords_ <- feature()$geometry$coordinates[[1]]
  
-    
     croppedImage <- cropSelectedAreaFromLandsatImage (coords_,multibandLayer)
     
     #Plot RDG image landsat8
@@ -180,8 +186,17 @@ server <- function(input, output, session) {
     
     #calculate NDVI
     output$NDVI <- renderPlot ({
-      plot(calculateNDVI (croppedImage))
+      NDVILayer <<- calculateNDVI (croppedImage)
+      plot(NDVILayer)
     })
+    
+    #calculate NDVI
+    output$LST <- renderPlot ({
+      plotLST(lstCalculation (croppedImage,NDVILayer,metad,11))
+    })
+    
+    
+    
     
   })
   
