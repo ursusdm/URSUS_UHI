@@ -36,6 +36,7 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 
 <img width="934" alt="dwnld" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/22f10cd8-5942-4b99-ba4d-02961bc1fedd">
 
+## Insert into Data folder 
 
 
 ### Requirements📋
@@ -47,6 +48,8 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 ### Main Steps📋
   
 - **Clone the repository** on your local machine (git clone "https://github.com/ursusdm/URSUS_UHI.git").
+
+- **Create Data folder** on URSUS_UHI root folder
 
 - **Open R proyect** file
   
