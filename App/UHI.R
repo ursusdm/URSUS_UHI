@@ -32,26 +32,23 @@ calculateNDVI <- function(landsatCroppedImage){
 #######################################################################
 
 PVCalculation <- function(NDVIrasterLayer){
-  
   minNDVI <- min (na.omit(values(NDVIrasterLayer)))
   maxNDVI <- max (na.omit(values(NDVIrasterLayer)))
-  
-  #Pv calculation
   PVRasterLayer <- ((NDVIrasterLayer - minNDVI)/(maxNDVI - minNDVI))^2
   return(PVRasterLayer)
 }
 
 
 
-EmissivityCalculation <- function(red = red, NDVI = NDVI){
-  #Read the NDVI band
-  ndvi <- NDVI
-  
+EmissivityCalculation <- function(red, ndvi, Pv){
+
   #Pv calculation
   Pv <- ((ndvi - 0.2)/(0.5 - 0.2))^2
+  
   E1_Sobrino <- 0.004*Pv + 0.986
-  E_Sobrino <- raster::raster(ndvi)
-  red <- (0.979 - 0.035*red)
+  
+  E_Sobrino <- ndvi
+  
   #where NDVI < 0.2, take the value from red band otherwise use NA:
   E_Sobrino[] = ifelse(ndvi[]<0.2, red[], NA)
   
@@ -104,8 +101,8 @@ lstCalculation = function (multibandLayer,ndviRaster,bandNumber) {
   
   PVLayer <- PVCalculation (ndviRaster)
   
-  # Calculate emissivity layer using Sobrino
-  emmisivityLayer <- EmissivityCalculation(multibandLayer[[3]],ndviRaster)
+  # Calculate emissivity layer
+  emmisivityLayer <- EmissivityCalculation(multibandLayer[[3]],ndviRaster,PVLayer)
   
   if (bandNumber==10)
     alpha_ <- 10.8
@@ -116,10 +113,10 @@ lstCalculation = function (multibandLayer,ndviRaster,bandNumber) {
 
   lstRaster <- (BTLayer/ ( 1 +  ( (alpha_*BTLayer)/p)   * log (emmisivityLayer)     ) )
 
-  print ("lstRaster")
-  print (lstRaster)
-  
-  return (lstRaster)
+  #print ("lstRaster")
+  #print (plot (lstRaster, title("lstRaster")))
+
+  return (BTLayer)
   
 }
 
@@ -150,7 +147,7 @@ calculateDAI <- function(ndviLayer,lstLayer) {
   lstImg <- lstLayer
   
   lst_m <- mean(na.omit((lstLayer [ndviLayer>0])))
-  lst_sd <- sd(na.omit((lstLayer [ndvi_list>0]))) 
+  lst_sd <- sd(na.omit((lstLayer [ndviLayer>0]))) 
   
   DAIImage <- F(ndviImg) * G ((lstImg-lst_m) / lst_sd)
   
@@ -188,7 +185,7 @@ createNormalizedDatasetForClustering <- function(lstTip, ndviTip) {
 }
 
 
-plot_DAI <- function(capa_a_pintar,name="") {
+plot_DAI <- function(capa_a_pintar,name="DAI") {
   capa_pts <- rasterToPoints(capa_a_pintar, spatial = TRUE)
   capa_df <- data.frame(capa_pts)
   capa_df <- cbind(capa_df, alpha = 1)

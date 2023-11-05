@@ -18,6 +18,8 @@ library(sf)
 library(leaflet.extras)
 library(shinydashboard)
 library(reshape2)
+library (ggplot2)
+library(wesanderson)
 
 
 
@@ -179,14 +181,14 @@ server <- function(input, output, session) {
     # read coords from polygon cropped area
     coords_ <- feature()$geometry$coordinates[[1]]
  
-    croppedImage <<- cropSelectedAreaFromLandsatImage (coords_,multibandLayer)
+    croppedImage <- cropSelectedAreaFromLandsatImage (coords_,multibandLayer)
     
 
-    NDVILayer <<- calculateNDVI (croppedImage)
-
-    rasterLST <<- lstCalculation (croppedImage,NDVILayer,11) 
+    NDVILayer <- calculateNDVI (croppedImage)
     
-    rasterDAI <<- calculateDAI(NDVILayer,rasterLST)
+    rasterLST <- lstCalculation (croppedImage,NDVILayer,10) 
+    
+    rasterDAI <- calculateDAI(NDVILayer,rasterLST)
     
     #Plot RDG image landsat8
     output$CROPPED <- renderPlot ({
@@ -196,7 +198,7 @@ server <- function(input, output, session) {
     #calculate NDVI
     output$NDVI <- renderPlot ({
       
-      plot(NDVILayer)
+      plot(NDVILayer,axes = FALSE, box = FALSE, horizontal = TRUE)
       
     })
     
@@ -209,7 +211,7 @@ server <- function(input, output, session) {
     #calculate DAI
     
     output$DAI <- renderPlot ({
-      plotLST(rasterDAI)
+      plot_DAI(rasterDAI)
     })
 
     
