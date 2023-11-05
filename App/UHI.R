@@ -133,3 +133,105 @@ plotLST <- function(lstRaster) {
 }
 
 
+
+
+
+
+#Aux functions for DAI calculation
+
+F <- function(x) {1 - tanh(x) / tanh(1)}
+
+G <- function(x){ tanh(x)}
+
+#Calculate DAI raster layer
+calculateDAI <- function(ndviLayer,lstLayer) {
+  
+  ndviImg <- ndviLayer
+  lstImg <- lstLayer
+  
+  lst_m <- mean(na.omit((lstLayer [ndviLayer>0])))
+  lst_sd <- sd(na.omit((lstLayer [ndvi_list>0]))) 
+  
+  DAIImage <- F(ndviImg) * G ((lstImg-lst_m) / lst_sd)
+  
+  return (DAIImage)
+  
+}
+
+#NormLIZE LST
+normalizeLST <-  function(lstLayer) {
+  
+  lstImgMean <- mean (na.omit(values (lstLayer)))
+  lstImgSD <- sd (na.omit(values (lstLayer)))
+  lstI <- lstLayer
+  lstTip <- (lstI-lstImgMean)/lstImgSD
+  return (lstTip)
+}
+
+#NormLIZE NDVI
+normalizeNDVI <-  function(ndviLayer) {
+  
+  ndviImgMean<- mean (na.omit(values (ndviLayer)))
+  ndviImgtSD <- sd (na.omit(values (ndviLayer)))
+  ndviI <- ndviLayer
+  ndviTip <- (ndviI-ndviImgMean)/ndviImgtSD 
+  return (ndviTip)
+}
+
+#create a normalized ndvi and lst for clustering
+createNormalizedDatasetForClustering <- function(lstTip, ndviTip) {
+  lstPixelDF <- as.data.frame(values(lstTip))
+  ndviPixelDF <- as.data.frame(values(ndviTip))
+  dfForPixelClustering  <- cbind (lstPixelDF,ndviPixelDF)
+  names(dfForPixelClustering) <- c("lst","ndvi")
+  return (dfForPixelClustering)
+}
+
+
+plot_DAI <- function(capa_a_pintar,name="") {
+  capa_pts <- rasterToPoints(capa_a_pintar, spatial = TRUE)
+  capa_df <- data.frame(capa_pts)
+  capa_df <- cbind(capa_df, alpha = 1)
+  ggplot() +
+    geom_raster(data = capa_df ,
+                aes(x = x,
+                    y = y,
+                    fill = layer)) +
+    guides(fill = guide_colorbar(title = name)) +
+    scale_fill_gradientn(colours = wes_palette("Zissou1", 10, type = "continuous"))+
+    theme_void()
+}
+
+# Induce kmeans model witn 3 cluster and pixels will be assigned to clusters
+# Return a dataset with asigned cluster for each pixel of image
+
+getClusters <- function(dfForPixelClustering) {
+  
+  kmncluster <- kmeans(na.omit(dfForPixelClustering),
+                       centers = 3, iter.max =  1000, nstart =10, algorithm = "Lloyd")
+  
+  # Add asigned cluster for each pixel
+  DFWithCluster <- cbind(na.omit(dfForPixelClustering),
+                         as.data.frame(kmncluster$cluster))
+  
+  names(DFWithCluster)[3] <- "CLUSTER"
+  
+  return (DFWithCluster)
+  
+}
+
+# Landsat image with cluster assigned
+getClusteredImage <- function (DFWithCluster,NDVIRaster) {
+  #Create raster images list with clusters assigned for image's pixels
+  #get image
+  imgClusteredPixels <- DFWithCluster
+  
+  imgRaster <- NDVIRaster
+  imgRaster[!is.na(NDVIRaster)] <- imgClusteredPixels$CLUSTER
+  #plot (imgRaster,col=heat.colors(3))
+  return (imgRaster)
+  
+}
+
+
+

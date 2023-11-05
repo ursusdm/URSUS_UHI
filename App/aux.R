@@ -10,7 +10,7 @@ readMultibandRasterLayer <- function (rasterImageFolder) {
 
     ##B2, Blue.
     if (str_detect(f, "B2.TIF", negate = FALSE)) {
-      b2 <- raster(f)
+      b2 <- raster::raster(f)
     }
     
     #B3 Green

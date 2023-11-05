@@ -186,6 +186,8 @@ server <- function(input, output, session) {
 
     rasterLST <<- lstCalculation (croppedImage,NDVILayer,11) 
     
+    rasterDAI <<- calculateDAI(NDVILayer,rasterLST)
+    
     #Plot RDG image landsat8
     output$CROPPED <- renderPlot ({
       plotRGBImage(croppedImage)
@@ -198,10 +200,16 @@ server <- function(input, output, session) {
       
     })
     
-    #calculate NDVI
+    #calculate LST
     
     output$LST <- renderPlot ({
       plotLST(rasterLST)
+    })
+    
+    #calculate DAI
+    
+    output$DAI <- renderPlot ({
+      plotLST(rasterDAI)
     })
 
     
