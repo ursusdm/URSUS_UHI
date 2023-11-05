@@ -53,7 +53,7 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 
 - **Open R proyect** file
   
-- **Download dependencies and libraries using renv:**  renv::init(), renv::install() and app ready!
+- **Download dependencies and libraries using renv:**  renv::init(). In any cases update raster, Rcpp, ad sp library will be neccesary! If app ot worok, you can try to install manually the library apps from (app.R start file)
 
 - **update.packages** for update R packages
 
