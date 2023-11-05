@@ -2,14 +2,13 @@
 
 <img width="1259" alt="Captura de pantalla 2021-05-24 a las 20 30 07" src="https://user-images.githubusercontent.com/68539118/119391636-e1a67700-bcce-11eb-9b01-42cafffdbf31.png">
 
-URSUS_UHI is a intelligent tool for the automatic determination of the urban areas most disadvantaged by the urban heat island effect.
+URSUS_UHI is a tool for the automatic determination of the urban areas most disadvantaged by the urban heat island effect. 
 
-ursus_uhi is a tool for the automatic determination of the urban areas most disadvantaged by the urban heat island effect.
-The operation of the system is very simple:
+The use of the tool is very simple, and consists of the following steps.
 
 a) Download a Landsat-8 image of the city of interest
 
-b) Cropping the area of ​​interest interactively on the map
+b) Select a landsat-8 image from the city of interest
 
 c) Cropping the area of ​​interest interactively on the map
 
@@ -33,6 +32,9 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 
  <img width="1657" alt="Landsat-4" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2372d05e-2a2c-4a14-b004-92d989e8de6b">
 
+### Download image
+
+<img width="934" alt="dwnld" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/22f10cd8-5942-4b99-ba4d-02961bc1fedd">
 
 
 
