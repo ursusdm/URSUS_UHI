@@ -126,6 +126,8 @@ server <- function(input, output, session) {
       
       extentCoordinatesLatLng <- utmToGPSExtent (multibandLayer[[1]])
       
+      
+      
       #Leflet map
       output$mymap <- renderLeaflet({
         
@@ -177,7 +179,12 @@ server <- function(input, output, session) {
     # read coords from polygon cropped area
     coords_ <- feature()$geometry$coordinates[[1]]
  
-    croppedImage <- cropSelectedAreaFromLandsatImage (coords_,multibandLayer)
+    croppedImage <<- cropSelectedAreaFromLandsatImage (coords_,multibandLayer)
+    
+
+    NDVILayer <<- calculateNDVI (croppedImage)
+
+    rasterLST <<- lstCalculation (croppedImage,NDVILayer,11) 
     
     #Plot RDG image landsat8
     output$CROPPED <- renderPlot ({
@@ -186,15 +193,17 @@ server <- function(input, output, session) {
     
     #calculate NDVI
     output$NDVI <- renderPlot ({
-      NDVILayer <<- calculateNDVI (croppedImage)
+      
       plot(NDVILayer)
+      
     })
     
     #calculate NDVI
-    output$LST <- renderPlot ({
-      plotLST(lstCalculation (croppedImage,NDVILayer,metad,11))
-    })
     
+    output$LST <- renderPlot ({
+      plotLST(rasterLST)
+    })
+
     
     
     

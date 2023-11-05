@@ -65,62 +65,42 @@ EmissivityCalculation <- function(red = red, NDVI = NDVI){
 }
 
 
+BT <- function(MultilayerBand, bandNumber){
+  
+  K1_CONSTANT_BAND_10 = 774.8853
+  K2_CONSTANT_BAND_10 = 1321.0789
 
 
-#Temperature of atmosphere calculation
-#!imp (bandNumber=10|bandNumber=11)
-
-calculateTOA <- function(r,multibandLayer,bandNumber) {
+  K1_CONSTANT_BAND_11 <- 480.8883
+  K2_CONSTANT_BAND_11 <- 1201.1442
   
-  metaData <- readMeta(r)
-  
-  RADIANCE_MULT_BAND <- metaData$CALRAD$gain[bandNumber] 
-  
-  RADIANCE_ADD_BAND <- metaData$CALRAD$offset[bandNumber]
-
-  if (bandNumber==10)
-    bandLayer <- multibandLayer[[5]]
-  else
-    bandLayer <- multibandLayer[[6]]
-  
-  toaLayer <- calc(bandLayer, fun=function(x){RADIANCE_MULT_BAND * x + RADIANCE_ADD_BAND})
-  
-  return (toaLayer)
-  
-}
-
-# Calculatio of bright temperature
-calculateBT <- function(r,toaLayer,bandNumber) {
-  
-  metaData <- readMeta(r)
   
   if (bandNumber==10) {
-    K1_CONSTANT_BAND <- metaData$CALBT$K1[1]
-    K2_CONSTANT_BAND <- metaData$CALBT$K2[1]
+    LandsatLAyer <- MultilayerBand[[5]]
   }
-  else{
-    K1_CONSTANT_BAND <- metaData$CALBT$K1[2] 
-    K2_CONSTANT_BAND <- metaData$CALBT$K2[2]
-  } 
-      
-  toaLayerKelvin <- calc(toaLayer, fun=function(x){
-    (K2_CONSTANT_BAND/log( (K1_CONSTANT_BAND/x) + 1))
-  })
+  else
+    LandsatLAyer <- MultilayerBand[[6]]
+
+  l_lambda <- 3.3420*10^-4*LandsatLAyer + 0.1
     
-  toaLayerCelsius <- calc(toaLayerKelvin, fun=function(x){x - 273.15})
+  if (bandNumber==10)
+    BT <- (K2_CONSTANT_BAND_10/(log(K1_CONSTANT_BAND_10/l_lambda + 1)))
+  else
+    BT<- (K2_CONSTANT_BAND_11/(log(K1_CONSTANT_BAND_11/l_lambda + 1)))
   
-  return (toaLayerCelsius)
-    
+  temp_celsius <- calc(BT, fun=function(x){x - 273.15})
+  
+  return(temp_celsius)
+  
 }
+
 
 
 #LST calculation
 
-lstCalculation = function (multibandLayer,ndviRaster,r,bandNumber) {
+lstCalculation = function (multibandLayer,ndviRaster,bandNumber) {
   
-  toaLayer <- calculateTOA(r,multibandLayer,bandNumber)
-  
-  BTLayer <- calculateBT(r,toaLayer,bandNumber)
+  BTLayer <- BT(multibandLayer,bandNumber)
   
   PVLayer <- PVCalculation (ndviRaster)
   
@@ -130,12 +110,15 @@ lstCalculation = function (multibandLayer,ndviRaster,r,bandNumber) {
   if (bandNumber==10)
     alpha_ <- 10.8
   else
-    alpha <- 12
+    alpha_ <- 12
   
   p <- 14388
 
   lstRaster <- (BTLayer/ ( 1 +  ( (alpha_*BTLayer)/p)   * log (emmisivityLayer)     ) )
 
+  print ("lstRaster")
+  print (lstRaster)
+  
   return (lstRaster)
   
 }
