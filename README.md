@@ -42,23 +42,28 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 
 - R
 - RStudio
-- Landsat-8 satellite images of the city to be analized
+- renv
+  
+**Clone the repository** on your local machine (git clone "https://github.com/ursusdm/URSUS_UHI.git").
+
+**Open R proyect** file
+  
+**Download dependencies and libraries using renv**
 
 ## How does it work? 🚀
-
-- Clone the repository on your local machine (git clone "https://github.com/ursusdm/URSUS_UHI.git"). 
-
-- For the correct operation of the tool, it is necessary:  
  
-  A) Create a **folder** called **data** that will contain the images of the cities to be analyzed
-  
-  B) Create a **folder with the name of the city** to be analyzed and add the Landsat-8 images inside data folder.  
-  
-  For example, to analyze the city of Malaga:  
+  A) Launch App
 
-<img width="546" alt="Captura de pantalla 2021-05-24 a las 13 24 07" src="https://user-images.githubusercontent.com/68539118/119340823-52c83900-bc93-11eb-8b82-67f449a63c9a.png">
+  B) Select image folde
+  
+  <img width="287" alt="Captura de Pantalla 2023-11-05 a las 1 56 11" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ae012be0-fa36-4cc7-86e0-029a1cbabd1d">
 
-<img width="291" alt="Captura de pantalla 2021-05-24 a las 13 22 03" src="https://user-images.githubusercontent.com/68539118/119340617-0977e980-bc93-11eb-82d9-bcae04b177d5.png"><img width="322" alt="Captura de pantalla 2021-05-24 a las 13 36 06" src="https://user-images.githubusercontent.com/68539118/119342208-0251db00-bc95-11eb-8e9c-43ec4af3bce3.png"><img width="822" alt="Captura de pantalla 2021-05-24 a las 13 38 10" src="https://user-images.githubusercontent.com/68539118/119342379-4b099400-bc95-11eb-92f7-c298c188b64d.png">
+  <img width="1106" alt="Captura de Pantalla 2023-11-05 a las 1 55 33" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f6c8243e-023a-4eba-ad61-af2c118769ef">
+  
+  B) Croping area of interest over leaflet map 
+  
+  <img width="1675" alt="Captura de Pantalla 2023-11-05 a las 1 51 55" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/3ecbe10b-5ee8-4cfb-b22f-cf6cb12a3bc5">
+
 
 
   C) **Select cropping mode** of the area of interest (manual / interactive) and run script:  
@@ -73,8 +78,6 @@ For **example**, to analyze the city of Malaga using **cropping_by_coordinates**
 
 
 <img width="1130" alt="Captura de pantalla 2021-05-24 a las 13 58 21" src="https://user-images.githubusercontent.com/68539118/119378888-0c88cf00-bcbf-11eb-9f46-7ddc796594b3.png">
-
-
 
 <img width="1121" alt="Captura de pantalla 2021-05-24 a las 13 53 29" src="https://user-images.githubusercontent.com/68539118/119344010-71303380-bc97-11eb-8d0c-9ff7a93d330f.png">
 
