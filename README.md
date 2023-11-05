@@ -62,9 +62,9 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
 
   <img width="1106" alt="Captura de Pantalla 2023-11-05 a las 1 55 33" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f6c8243e-023a-4eba-ad61-af2c118769ef">
   
-  B) Croping area of interest over leaflet map. Blue rectangle is the area cover by the selected landsat-8 image.
+  B) Croping area of interest over leaflet map (blue rectangle).  Red rectangle is the area cover by the selected landsat-8 image.
   
-  <img width="1675" alt="Captura de Pantalla 2023-11-05 a las 1 51 55" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/3ecbe10b-5ee8-4cfb-b22f-cf6cb12a3bc5">
+  <img width="1680" alt="Captura de Pantalla 2023-11-05 a las 2 15 41" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ba07dc96-71dd-4cef-91e4-6f45af38f399">
 
   C) Show result
 
