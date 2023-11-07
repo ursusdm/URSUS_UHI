@@ -31,34 +31,20 @@ calculateNDVI <- function(landsatCroppedImage){
 #####################                                        ##########
 #######################################################################
 
-PVCalculation <- function(NDVIrasterLayer){
-  minNDVI <- min (na.omit(values(NDVIrasterLayer)))
-  maxNDVI <- max (na.omit(values(NDVIrasterLayer)))
-  PVRasterLayer <- ((NDVIrasterLayer - minNDVI)/(maxNDVI - minNDVI))^2
-  return(PVRasterLayer)
-}
 
-
-
-EmissivityCalculation <- function(red, ndvi, Pv){
-
+E_Valor <- function(NDVI){
+  #Read the NDVI band
+  ndvi <- NDVI
+  
   #Pv calculation
   Pv <- ((ndvi - 0.2)/(0.5 - 0.2))^2
-  
-  E1_Sobrino <- 0.004*Pv + 0.986
-  
-  E_Sobrino <- ndvi
-  
-  #where NDVI < 0.2, take the value from red band otherwise use NA:
-  E_Sobrino[] = ifelse(ndvi[]<0.2, red[], NA)
-  
-  #where NDVI is over 0.5 set E to 0.99, otherwise use whatever was in E:
-  E_Sobrino[] = ifelse(ndvi[]>0.5, 0.99, E_Sobrino[])
-  
-  #if NDVI is between 0.2 and 0.5 take the value from b otherwise use whatever was in E:
-  E_Sobrino[] = ifelse(ndvi[]>=0.2 & ndvi[]<=0.5, E1_Sobrino[], E_Sobrino[])
-  
-  return(E_Sobrino)
+  Pv_df <- raster::as.data.frame(Pv, xy = T)
+  #Emissivity calculation
+  E_Valor <- 0.985*Pv_df[3] + 0.960*(1 - Pv_df[3]) + 0.06*Pv_df[3]*(1 - Pv_df[3])
+  #E_Valor[E_Valor>1] <- 1
+  E_Valor_xyz <- cbind.data.frame(Pv_df[1:2], E_Valor)
+  E_Valor_raster <- raster::rasterFromXYZ(E_Valor_xyz)
+  return(E_Valor_raster)
 }
 
 
@@ -71,19 +57,23 @@ BT <- function(MultilayerBand, bandNumber){
   K1_CONSTANT_BAND_11 <- 480.8883
   K2_CONSTANT_BAND_11 <- 1201.1442
   
+  RAD_MUL_BAND <- 3.3420*10^-4
+  RADIANCE_ADD_BAND <- 0.1
+  
   
   if (bandNumber==10) {
-    LandsatLAyer <- MultilayerBand[[5]]
+    Q_CAL <- MultilayerBand[[5]]
   }
   else
-    LandsatLAyer <- MultilayerBand[[6]]
+    Q_CAL <- MultilayerBand[[6]]
 
-  l_lambda <- 3.3420*10^-4*LandsatLAyer + 0.1
+  l_lambda <- RAD_MUL_BAND *Q_CAL + RADIANCE_ADD_BAND
+  
     
   if (bandNumber==10)
-    BT <- (K2_CONSTANT_BAND_10/(log(K1_CONSTANT_BAND_10/l_lambda + 1)))
+    BT <- ( K2_CONSTANT_BAND_10 / (log(K1_CONSTANT_BAND_10/l_lambda + 1) ) )
   else
-    BT<- (K2_CONSTANT_BAND_11/(log(K1_CONSTANT_BAND_11/l_lambda + 1)))
+    BT<- ( K2_CONSTANT_BAND_11 / (log(K1_CONSTANT_BAND_11/l_lambda + 1) ) )
   
   temp_celsius <- calc(BT, fun=function(x){x - 273.15})
   
@@ -92,17 +82,13 @@ BT <- function(MultilayerBand, bandNumber){
 }
 
 
-
 #LST calculation
 
 lstCalculation = function (multibandLayer,ndviRaster,bandNumber) {
   
   BTLayer <- BT(multibandLayer,bandNumber)
   
-  PVLayer <- PVCalculation (ndviRaster)
-  
-  # Calculate emissivity layer
-  emmisivityLayer <- EmissivityCalculation(multibandLayer[[3]],ndviRaster,PVLayer)
+  emmisivityLayer <- 1.094 + 0.047*log(ndviRaster)
   
   if (bandNumber==10)
     alpha_ <- 10.8
@@ -110,22 +96,23 @@ lstCalculation = function (multibandLayer,ndviRaster,bandNumber) {
     alpha_ <- 12
   
   p <- 14388
+  
+  lstRaster <- ( BTLayer/ ( 1 +  ( (alpha_*BTLayer)/p)   * log (E_Valor(ndviRaster))     )  )
 
-  lstRaster <- (BTLayer/ ( 1 +  ( (alpha_*BTLayer)/p)   * log (emmisivityLayer)     ) )
-
-  #print ("lstRaster")
-  #print (plot (lstRaster, title("lstRaster")))
-
-  return (BTLayer)
+  ########## Cambiar por lstRaster ################
+  return (lstRaster)
   
 }
 
 
 plotLST <- function(lstRaster) {
   
-  plot(lstRaster,col = rev(heat.colors(12)), legend.args =
+  
+  maxVal <-  min (na.omit(lstRaster) )
+  
+  plot(lstRaster,col = rev(heat.colors(10)), legend.args =
          list(paste(text='LST','')),
-       axes=FALSE, horizontal = TRUE, box = FALSE)
+       axes=FALSE, horizontal = TRUE, box = FALSE, colNA="green")
 
 }
 
@@ -199,6 +186,23 @@ plot_DAI <- function(capa_a_pintar,name="DAI") {
     theme_void()
 }
 
+
+plot_CLUSTERS <- function(capa_a_pintar,name="CLUSTERS",clusterColor) {
+  
+  capa_pts <- rasterToPoints(capa_a_pintar, spatial = TRUE)
+  capa_df <- data.frame(capa_pts)
+  capa_df <- cbind(capa_df, alpha = 1)
+  ggplot() +
+    geom_raster(data = capa_df ,
+                aes(x = x,
+                    y = y,
+                    fill = layer)) +
+    guides(fill = guide_colorbar(title = name)) +
+    #scale_fill_gradientn(colours = clusterColor)+
+    scale_color_identity(guide = "legend", labels = clusterColor$cluster) +
+    theme_void()
+}
+
 # Induce kmeans model witn 3 cluster and pixels will be assigned to clusters
 # Return a dataset with asigned cluster for each pixel of image
 
@@ -217,16 +221,65 @@ getClusters <- function(dfForPixelClustering) {
   
 }
 
-# Landsat image with cluster assigned
+# return Landsat image with cluster assigned
 getClusteredImage <- function (DFWithCluster,NDVIRaster) {
-  #Create raster images list with clusters assigned for image's pixels
-  #get image
   imgClusteredPixels <- DFWithCluster
-  
   imgRaster <- NDVIRaster
   imgRaster[!is.na(NDVIRaster)] <- imgClusteredPixels$CLUSTER
-  #plot (imgRaster,col=heat.colors(3))
   return (imgRaster)
+}
+
+
+# get color for clusters (blue water, yellow not bad, red more disf)
+
+getClustersColors <- function(DAIPixels, clusteredPixels) {
+  
+  dfIMG <- data.frame (DAI=as.vector(DAIPixels),CLUSTER=as.vector(clusteredPixels))
+  
+  summaryForColor <- dfIMG %>% group_by(CLUSTER) %>% summarise(MEDIANA=median(DAI,na.rm=TRUE))
+  
+  maximo <- max (na.omit(summaryForColor$MEDIANA)) 
+  
+  minimo <- min (na.omit(summaryForColor$MEDIANA)) 
+  
+  maxPosition <- which(na.omit(summaryForColor$MEDIANA) %in% c(maximo))
+  
+  minPosition <- which(na.omit(summaryForColor$MEDIANA) %in% c(minimo))
+  
+  paletteCommon <- wes_palette("Zissou1", 10, type = "continuous")
+  
+  myColor <- c(1:3)
+  
+  for (colorIndex in 1:length(myColor)) {
+    myColor[colorIndex] <- paletteCommon[6]
+  }
+  
+  myColor [[maxPosition]] <- paletteCommon[10] #red for cluster disfavourable
+  
+  myColor [[minPosition]] <- paletteCommon[1] #blue for water cluster
+  
+  colors_frame <- tribble(
+    ~cluster, ~color,
+    "Disfavurable", myColor [[minPosition]],
+    "More Favourable",  myColor [[minPosition]],
+    "Favourable", paletteCommon[6]
+  )
+  
+  return (colors_frame)
+
+}
+
+
+
+getMoreDisfavourableAreas <- function (DAIPixels, clusteredPixels) {
+  
+  myColor <- getClustersColors (DAIPixels, clusteredPixels)
+  
+  dfFull<- data.frame(DAI=as.vector(DAIPixels),CLUSTER=as.vector(clusteredPixels))
+  
+  #umNumberOfPixelOfClusDisfForImg <- dfFull %>% filter (CLUSTER==2) %>% group_by(IM_ID) %>% summarise(n = n())
+  
+  
   
 }
 

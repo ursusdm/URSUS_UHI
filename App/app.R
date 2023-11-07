@@ -20,6 +20,7 @@ library(shinydashboard)
 library(reshape2)
 library (ggplot2)
 library(wesanderson)
+library (dplyr)
 
 
 
@@ -80,7 +81,7 @@ ui <- dashboardPage(
           status = "danger",
           solidHeader = TRUE,
           plotOutput("LST"),
-          width = 4
+          width = 6
         ),
         
         box(
@@ -88,15 +89,46 @@ ui <- dashboardPage(
           status = "success",
           solidHeader = TRUE,
           plotOutput("NDVI"),
-          width = 4
-        ),
+          width = 6
+        )
+        
+      ),
+      
+      fluidRow(
+        
+        class = "text-center",
         
         box(
           title = "DAI",
           status = "danger",
           solidHeader = TRUE,
           plotOutput("DAI"),
-          width = 4
+          width = 6
+        ),
+        
+        
+        box(
+          title = "CLUSTERS",
+          status = "danger",
+          solidHeader = TRUE,
+          plotOutput("CLUSTERS"),
+          width = 6
+        ),
+        
+       
+        
+      ),
+      
+      fluidRow(
+        
+        class = "text-center",
+        
+        box(
+          title = "DISFAVOUR",
+          status = "danger",
+          solidHeader = TRUE,
+          plotOutput("DISFAVOUR"),
+          width = 12
         )
         
       )
@@ -183,12 +215,25 @@ server <- function(input, output, session) {
  
     croppedImage <- cropSelectedAreaFromLandsatImage (coords_,multibandLayer)
     
-
     NDVILayer <- calculateNDVI (croppedImage)
     
     rasterLST <- lstCalculation (croppedImage,NDVILayer,10) 
     
     rasterDAI <- calculateDAI(NDVILayer,rasterLST)
+    
+    normalizeLST <- normalizeLST(rasterLST)
+    
+    normalizeNDVI <- normalizeNDVI(NDVILayer)
+    
+    dfForPixelClustering <- createNormalizedDatasetForClustering (normalizeLST,normalizeNDVI)
+    
+    DFWithCluster <- getClusters (dfForPixelClustering)
+    
+    clusteringRaster <- getClusteredImage(DFWithCluster,NDVILayer)
+    
+    colorForClustering <- getClustersColors (rasterDAI, clusteringRaster)
+    
+    getMoreDisfavourableAreas(rasterDAI, clusteringRaster)
     
     #Plot RDG image landsat8
     output$CROPPED <- renderPlot ({
@@ -203,7 +248,7 @@ server <- function(input, output, session) {
     })
     
     #calculate LST
-    
+
     output$LST <- renderPlot ({
       plotLST(rasterLST)
     })
@@ -213,9 +258,21 @@ server <- function(input, output, session) {
     output$DAI <- renderPlot ({
       plot_DAI(rasterDAI)
     })
+    
+    #calculate cluster
+    print ("clusteringRaster")
+    print (clusteringRaster)
+    output$CLUSTERS <- renderPlot ({
+      #plot(clusteringRaster,axes = FALSE, box = FALSE, horizontal = TRUE, col = colorForClustering)
+      plot_CLUSTERS (clusteringRaster, clusterColor =  colorForClustering)
+    })
+    
+    #calculate DAI
+    
+    output$DISFAVOUR <- renderPlot ({
+      #plot(rasterDAI)
+    })
 
-    
-    
     
   })
   
