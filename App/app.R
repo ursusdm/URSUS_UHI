@@ -99,38 +99,21 @@ ui <- dashboardPage(
         class = "text-center",
         
         box(
-          title = "DAI",
-          status = "danger",
-          solidHeader = TRUE,
-          plotOutput("DAI"),
-          width = 6
-        ),
-        
-        
-        box(
           title = "CLUSTERS",
-          status = "danger",
+          status = "warning",
           solidHeader = TRUE,
           plotOutput("CLUSTERS"),
           width = 6
         ),
         
-       
-        
-      ),
-      
-      fluidRow(
-        
-        class = "text-center",
-        
         box(
-          title = "DISFAVOUR",
+          title = "DAI for disfavourable area cluster",
           status = "danger",
           solidHeader = TRUE,
-          plotOutput("DISFAVOUR"),
-          width = 12
+          plotOutput("DAI"),
+          width = 6
         )
-        
+  
       )
       
     )
@@ -233,7 +216,12 @@ server <- function(input, output, session) {
     
     colorForClustering <- getClustersColors (rasterDAI, clusteringRaster)
     
-    getMoreDisfavourableAreas(rasterDAI, clusteringRaster)
+    
+    clusterMoreDisfavourable <- getClusterDisfavourable (rasterDAI, clusteringRaster)
+    
+    DAIForClusterDisfavourable <- removeFavourableAreasFromDAI (rasterDAI,clusterMoreDisfavourable,clusteringRaster)
+    
+    #disfAras <- getMoreDisfavourableAreas(rasterDAI, clusteringRaster)
     
     #Plot RDG image landsat8
     output$CROPPED <- renderPlot ({
@@ -243,35 +231,29 @@ server <- function(input, output, session) {
     #calculate NDVI
     output$NDVI <- renderPlot ({
       
-      plot(NDVILayer,axes = FALSE, box = FALSE, horizontal = TRUE)
+      plot_NDVI(NDVILayer)
       
     })
     
     #calculate LST
 
     output$LST <- renderPlot ({
-      plotLST(rasterLST)
+      plot_LST(rasterLST)
     })
     
-    #calculate DAI
+    # DAI for unfavourable areas
     
     output$DAI <- renderPlot ({
-      plot_DAI(rasterDAI)
+      plot_DAI(DAIForClusterDisfavourable)
     })
     
     #calculate cluster
-    print ("clusteringRaster")
-    print (clusteringRaster)
+
     output$CLUSTERS <- renderPlot ({
       #plot(clusteringRaster,axes = FALSE, box = FALSE, horizontal = TRUE, col = colorForClustering)
-      plot_CLUSTERS (clusteringRaster, clusterColor =  colorForClustering)
+      plot_CLUSTERS_2 (clusteringRaster, clusterColor =  colorForClustering)
     })
     
-    #calculate DAI
-    
-    output$DISFAVOUR <- renderPlot ({
-      #plot(rasterDAI)
-    })
 
     
   })

@@ -105,22 +105,6 @@ lstCalculation = function (multibandLayer,ndviRaster,bandNumber) {
 }
 
 
-plotLST <- function(lstRaster) {
-  
-  
-  maxVal <-  min (na.omit(lstRaster) )
-  
-  plot(lstRaster,col = rev(heat.colors(10)), legend.args =
-         list(paste(text='LST','')),
-       axes=FALSE, horizontal = TRUE, box = FALSE, colNA="green")
-
-}
-
-
-
-
-
-
 #Aux functions for DAI calculation
 
 F <- function(x) {1 - tanh(x) / tanh(1)}
@@ -172,12 +156,14 @@ createNormalizedDatasetForClustering <- function(lstTip, ndviTip) {
 }
 
 
-plot_DAI <- function(capa_a_pintar,name="DAI") {
-  capa_pts <- rasterToPoints(capa_a_pintar, spatial = TRUE)
-  capa_df <- data.frame(capa_pts)
-  capa_df <- cbind(capa_df, alpha = 1)
+plot_DAI <- function(layerToPaint,name="DAI") {
+  
+  layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
+  layerDF <- data.frame(layerPoints)
+  layerDF <- cbind(layerDF, alpha = 1)
+
   ggplot() +
-    geom_raster(data = capa_df ,
+    geom_raster(data = layerDF ,
                 aes(x = x,
                     y = y,
                     fill = layer)) +
@@ -186,22 +172,109 @@ plot_DAI <- function(capa_a_pintar,name="DAI") {
     theme_void()
 }
 
-
-plot_CLUSTERS <- function(capa_a_pintar,name="CLUSTERS",clusterColor) {
+plot_CLUSTERS_2 <- function(layerToPaint,name="CLUSTERS",clusterColor) {
   
-  capa_pts <- rasterToPoints(capa_a_pintar, spatial = TRUE)
-  capa_df <- data.frame(capa_pts)
-  capa_df <- cbind(capa_df, alpha = 1)
+  layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
+  layerDF <- data.frame(layerPoints)
+  layerDF <- cbind(layerDF, alpha = 1)
+  
+  
+    ggplot(data = layerDF) +
+      geom_raster(aes(x = x, y = y, fill = layer)) + 
+      guides(fill = guide_colorbar(title = name)) +
+
+      scale_fill_gradientn(name = "", 
+                            limits= c (1,3),
+                            breaks = c(1:3),
+                            colours = clusterColor$color[[1]],
+                            labels = unlist(clusterColor$label[[1]])) +
+      theme_void() +
+
+      theme(
+        legend.position = "right",
+        legend.text=element_text(size=10)
+
+      )
+
+}
+
+
+plot_NDVI<- function(layerToPaint,name="NDVI") {
+  
+  layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
+  layerDF <- data.frame(layerPoints)
+  layerDF <- cbind(layerDF, alpha = 1)
+  
   ggplot() +
-    geom_raster(data = capa_df ,
+    geom_raster(data = layerDF ,
                 aes(x = x,
                     y = y,
                     fill = layer)) +
     guides(fill = guide_colorbar(title = name)) +
-    #scale_fill_gradientn(colours = clusterColor)+
-    scale_color_identity(guide = "legend", labels = clusterColor$cluster) +
+    scale_fill_gradientn(colours = rev(terrain.colors(10)))+
     theme_void()
+  
 }
+
+plot_LST<- function(layerToPaint,name="LST") {
+  
+  layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
+  layerDF <- data.frame(layerPoints)
+  layerDF <- cbind(layerDF, alpha = 1)
+  
+  ggplot() +
+    geom_raster(data = layerDF ,
+                aes(x = x,
+                    y = y,
+                    fill = layer)) +
+    guides(fill = guide_colorbar(title = name)) +
+    scale_fill_gradientn(colours = rev(heat.colors(10)))+
+    theme_void()
+  
+}
+
+
+# calculation of a raster with DAI pixels values for the cluster with the more disfavourable areas
+removeFavourableAreasFromDAI <- function(DAI, disvavourableCluster, clusterRaster) {
+  DAIMoreDisfavourableAreas <- DAI
+
+  DAIMoreDisfavourableAreas [clusterRaster!=disvavourableCluster] <- NA
+
+  return (DAIMoreDisfavourableAreas)
+  
+  
+  
+  
+}
+
+
+plot_disfavourableAreas <- function(layerToPaint,name="DISFAVOURABLE AREAS",clusterColor, DAI) {
+  
+  layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
+  layerDF <- data.frame(layerPoints)
+  layerDF <- cbind(layerDF, alpha = 1)
+  
+  
+  ggplot(data = layerDF) +
+    geom_raster(aes(x = x, y = y, fill = layer)) + 
+    guides(fill = guide_colorbar(title = name)) +
+    
+    scale_fill_gradientn(name = "", 
+                         limits= c (1,3),
+                         breaks = c(1:3),
+                         colours = clusterColor$color[[1]],
+                         labels = unlist(clusterColor$label[[1]])) +
+    theme_void() +
+    
+    theme(
+      legend.position = "right",
+      legend.text=element_text(size=10)
+      
+    )
+  
+}
+
+
 
 # Induce kmeans model witn 3 cluster and pixels will be assigned to clusters
 # Return a dataset with asigned cluster for each pixel of image
@@ -229,8 +302,27 @@ getClusteredImage <- function (DFWithCluster,NDVIRaster) {
   return (imgRaster)
 }
 
+# not in
+'%!in%' <- function(x,y)!('%in%'(x,y))
 
-# get color for clusters (blue water, yellow not bad, red more disf)
+
+
+getClusterDisfavourable <- function (DAIPixels, clusteredPixels) {
+  
+  dfIMG <- data.frame (DAI=as.vector(DAIPixels),CLUSTER=as.vector(clusteredPixels))
+  
+  summaryForColor <- dfIMG %>% group_by(CLUSTER) %>% summarise(MEDIANA=median(DAI,na.rm=TRUE))
+  
+  maximo <- max (na.omit(summaryForColor$MEDIANA)) 
+  
+  maxPosition <- which(na.omit(summaryForColor$MEDIANA) %in% c(maximo))
+  
+  return (maxPosition)
+  
+}
+
+
+# get color and leyend for clusters 
 
 getClustersColors <- function(DAIPixels, clusteredPixels) {
   
@@ -249,20 +341,30 @@ getClustersColors <- function(DAIPixels, clusteredPixels) {
   paletteCommon <- wes_palette("Zissou1", 10, type = "continuous")
   
   myColor <- c(1:3)
-  
+  myClusterLabel <- c(1:3)
+  cluster <- c(1:3)
+ 
   for (colorIndex in 1:length(myColor)) {
     myColor[colorIndex] <- paletteCommon[6]
+    myClusterLabel[colorIndex]  <- "Favourable"
+    cluster[colorIndex]  <- 4
   }
   
   myColor [[maxPosition]] <- paletteCommon[10] #red for cluster disfavourable
+  myClusterLabel [[maxPosition]] <- "More disfavourable" 
   
   myColor [[minPosition]] <- paletteCommon[1] #blue for water cluster
+  myClusterLabel [[minPosition]] <- "More favourable" 
   
+  
+  cluster [[maxPosition]] <- maxPosition
+  cluster [[minPosition]] <- minPosition
+  pos <- which (myClusterLabel %!in% c("More disfavourable","More favourable" ) )
+  cluster [which(cluster %in% 4)] <- pos
+
   colors_frame <- tribble(
-    ~cluster, ~color,
-    "Disfavurable", myColor [[minPosition]],
-    "More Favourable",  myColor [[minPosition]],
-    "Favourable", paletteCommon[6]
+    ~cluster, ~color, ~label,
+    cluster, myColor, myClusterLabel
   )
   
   return (colors_frame)
