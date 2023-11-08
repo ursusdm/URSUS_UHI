@@ -65,26 +65,27 @@ To download Landsat-8 images of the cities of study interest, we can do so for f
   
   <img width="287" alt="Captura de Pantalla 2023-11-05 a las 1 56 11" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ae012be0-fa36-4cc7-86e0-029a1cbabd1d">
 
-  <img width="1106" alt="Captura de Pantalla 2023-11-05 a las 1 55 33" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f6c8243e-023a-4eba-ad61-af2c118769ef">
+  <img width="897" alt="Captura de Pantalla 2023-11-08 a las 15 25 08" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/8d51b71e-1a92-47b4-a758-db76747a46ab">
+
   
   B) Croping area of interest over leaflet map (blue rectangle).  Red rectangle is the area cover by the selected landsat-8 image.
   
-  <img width="1680" alt="Captura de Pantalla 2023-11-05 a las 2 15 41" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ba07dc96-71dd-4cef-91e4-6f45af38f399">
+  <img width="967" alt="MAP" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/5f5176aa-e313-41b2-861e-17e886cc79e3">
+  
+  <img width="971" alt="croped" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/7b775255-5685-4bbe-92d8-15deeea82d49">
+
 
   C) Show result
 
  ## Results
 
- **NDVI** Normalized difference Vegetation Index
- 
- <img width="553" alt="Captura de Pantalla 2023-11-05 a las 2 04 28" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/08e3960b-2a83-4f25-a303-55130192c0a5">
+ **NDVI** Normalized difference Vegetation Index and **LST** Land Surface Temperature
 
- **LST** Land Surface Temperature
- 
- **DISFAVOURABLE AREAS WITH DAI INDEX** This plot show the more disfavourables areas and their damage level.
+ <img width="1675" alt="LST_NDVI" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/4c33f6db-4976-49b7-a7b5-3d4a8aa9fb3a">
 
+ **CLUSTERS AND DISFAVOURABLE AREAS WITH DAI INDEX** This plot show the more disfavourables areas and their damage level.
 
- 
+ <img width="1671" alt="CLUSTERS_DAI" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ed7ca4d9-a7a5-4956-b1f3-d2c4ee740b49">
 
 ## Developed tool 🛠️
 
