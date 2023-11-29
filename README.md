@@ -79,17 +79,16 @@ The first step is to register a user in [with USGS](https://earthexplorer.usgs.g
   <img width="121" alt="Captura de pantalla 2023-11-29 a las 17 56 59" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/27ed6bd7-fa32-4dee-8b95-09f2b65b5958">
 
 - **Install renv**
-  
+
+ Open RStudio terminal and install renv library.
+ 
 <img width="226" alt="Captura de pantalla 2023-11-29 a las 18 03 32" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/6ad97af5-496c-452e-9c86-47bc1217273d">
 
 - **Download dependencies and libraries using renv:**  renv::init().
 
  <img width="387" alt="Captura de pantalla 2023-11-29 a las 17 58 12" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f4782b79-cfe7-4c73-b4cc-ae39febfbbf1">
 
-<img width="618" alt="Captura de pantalla 2023-11-29 a las 18 04 28" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/3149f386-a625-4803-ba17-b5cf914b9171">
-
- <img width="349" alt="Captura de pantalla 2023-11-29 a las 18 04 46" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/7efe72d6-5b31-4ac5-8120-b955d2564448">
-
+ <img width="639" alt="Captura de pantalla 2023-11-29 a las 18 06 52" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/fd47d9ee-1338-419e-bdff-cd197c44e1d5">
 
  If app not works, you can try to install manually the required library apps from (app.R start file) using install.packages("libraryNAme")
 
