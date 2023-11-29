@@ -33,7 +33,9 @@ The first step is to register a user in [with USGS](https://earthexplorer.usgs.g
 
  <img width="430" alt="Landsat-3" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ad8dd8ec-d57c-4e12-a74f-1e90b8a4b9b9">
 
- - Push result button 
+
+ - Push result button
+   
  
 <img width="414" alt="Captura de pantalla 2023-11-29 a las 17 18 47" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/37d6c0cc-5159-4b01-9a3c-d10f1013b885">
 
@@ -47,8 +49,12 @@ The first step is to register a user in [with USGS](https://earthexplorer.usgs.g
 
 <img width="409" alt="Captura de pantalla 2023-11-29 a las 17 24 32" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/518bb558-5fff-43d4-a189-75b3d5177e27">
 
-- Click sldldslds
+- Click products options
 
+ <img width="445" alt="Captura de pantalla 2023-11-29 a las 17 30 28" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/26319dfb-edca-42f5-808f-3741c6a1daed">
+
+- Download the first file (1 GB aprox.)
+  
 <img width="934" alt="dwnld" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/22f10cd8-5942-4b99-ba4d-02961bc1fedd">
 
 ## Insert into Data folder 
