@@ -86,6 +86,8 @@ The first step is to register a user in [with USGS](https://earthexplorer.usgs.g
 
 - **Download dependencies and libraries using renv:**  renv::init().
 
+- Select yes to process and section 1 for use exactly the same libraries which the app use in your RStudio environment proyect.
+
  <img width="387" alt="Captura de pantalla 2023-11-29 a las 17 58 12" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f4782b79-cfe7-4c73-b4cc-ae39febfbbf1">
 
  <img width="639" alt="Captura de pantalla 2023-11-29 a las 18 06 52" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/fd47d9ee-1338-419e-bdff-cd197c44e1d5">
@@ -100,7 +102,10 @@ The first step is to register a user in [with USGS](https://earthexplorer.usgs.g
 
 ## How does it work? 🚀
  
-  A) Launch App
+  A) Launch App (play button on App.R)
+
+  <img width="1190" alt="Captura de pantalla 2023-11-29 a las 18 10 08" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f631958a-50f3-4ed4-9356-cc0c5f99760c">
+
 
   B) Select image folder
   
@@ -150,5 +155,4 @@ This project is under GNU General Public License v3.0 [LICENSE.md](LICENSE.md) f
 
 ## Acknowledgements 🎁
 
-* This work has been supported by the project RTI2018-095097-B-I00 at the 2018 call for I+D+i Project of the Ministerio de Ciencia, Innovación y Universidades, Spain. Funding for open access charge: Universidad de Málaga / CBUA.
-
+* This work has been supported by the project RTI2018-095097-B-I00 at the 2018 call for I+D+i Project of the Ministerio de Ciencia, Innovación y Universidades, Spain. 
