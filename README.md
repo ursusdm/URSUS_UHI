@@ -68,15 +68,25 @@ The first step is to register a user in [with USGS](https://earthexplorer.usgs.g
 
 ### Main Steps📋
   
-- **Clone the repository** on your local machine (git clone "https://github.com/ursusdm/URSUS_UHI.git").
+- **Clone the repository** Open your terminal on your local machine and clone repository (git clone "https://github.com/ursusdm/URSUS_UHI.git").
 
-- **Create Data folder** on URSUS_UHI App folder
+- **Create Data folder** on URSUS_UHI App folder. You can create data folder from the UI or from the terminal with the command mkdir data (in both cases inside the APP folder of the project)
 
 - **Open R proyect** file
-  
-- **Download dependencies and libraries using renv:**  renv::init(). In any cases update raster, Rcpp, ad sp library will be neccesary! If app ot worok, you can try to install manually the library apps from (app.R start file)
+- 
+  <img width="121" alt="Captura de pantalla 2023-11-29 a las 17 56 59" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/27ed6bd7-fa32-4dee-8b95-09f2b65b5958">
 
-- **update.packages** for update R packages
+- **Download dependencies and libraries using renv:**  renv::init().
+
+ <img width="387" alt="Captura de pantalla 2023-11-29 a las 17 58 12" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f4782b79-cfe7-4c73-b4cc-ae39febfbbf1">
+
+ If app not works, you can try to install manually the required library apps from (app.R start file) using install.packages("libraryNAme")
+
+ <img width="178" alt="Captura de pantalla 2023-11-29 a las 17 51 49" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da2dc255-e2a4-4e4b-967a-5646f04f6a50">
+
+<img width="493" alt="Captura de pantalla 2023-11-29 a las 17 52 40" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/6161ed22-902d-4033-a6ac-6552182f4071">
+
+
 
 ## How does it work? 🚀
  
