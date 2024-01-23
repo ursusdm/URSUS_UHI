@@ -7,20 +7,39 @@
 #    http://shiny.rstudio.com/
 #
 
+# installing required packages 
+packages.required <- c("shiny",
+                      "shinyFiles",
+                      "stringr",
+                      "raster",
+                      "leaflet",
+                      "sf",
+                      "leaflet.extras",
+                      "shinydashboard",
+                      "reshape2",
+                      "ggplot2",
+                      "wesanderson",
+                      "dplyr",
+                      "sp")
+packages.missed <- packages.required[!(packages.required %in% installed.packages()[,"Package"])]
+if(length(packages.missed)) install.packages(packages.missed)
+
+
 library(shiny)
 library(shinyFiles)
-source('aux.R')
-source('UHI.R')
-library (stringr)
+library(stringr)
 library(raster)
 library(leaflet)
 library(sf)
 library(leaflet.extras)
 library(shinydashboard)
 library(reshape2)
-library (ggplot2)
+library(ggplot2)
 library(wesanderson)
-library (dplyr)
+library(dplyr)
+library(sp)
+source('aux.R')
+source('UHI.R')
 
 
 
