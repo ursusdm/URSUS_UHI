@@ -42,11 +42,7 @@ Search for Landsat-8 image and press the "Results" button
 
 Each image has a list of buttons to interact with it. Click on the "Download" button for that image (green arrow going down to a hard disk).
 
-=== ESTAS DOS IMÁGENES LAS FUSIONARÍA
-
- <img width="1657" alt="Landsat-4" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2372d05e-2a2c-4a14-b004-92d989e8de6b">
-
-<img width="409" alt="Captura de pantalla 2023-11-29 a las 17 24 32" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/518bb558-5fff-43d4-a189-75b3d5177e27">
+<img width="1079" alt="ds" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da82dc61-f2e3-429c-a588-2a70031d8d83">
 
 Click in the "Products options" button
 
