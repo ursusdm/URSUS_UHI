@@ -27,7 +27,7 @@ Define "Feature Name" and "Country" (or "State" if US features are used). In thi
 
 === ESTA IMAGEN HABRÍA QUE VOLVERLA A CAPTURAR (para que esté seleccionado el worl features)
 
-<img width="433" alt="Select the city of study interest (1): Filter" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a74b6766-cdaa-4675-a701-b59060bacbad">
+<img width="430" alt="W_F" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/0826446b-95a1-41ea-8eae-76f1e9ad1f08">
 
 Press the "Show" button and select the most appropriate element. A map with the selected item is then displayed.
 
