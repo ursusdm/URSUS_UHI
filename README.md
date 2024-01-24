@@ -35,12 +35,8 @@ Press the "Show" button and select the most appropriate element. A map with the 
 
 Search for Landsat-8 image and press the "Results" button
 
+<img width="439" alt="result_button" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ec40f2e3-c1c7-433f-b61a-7178a4627cbe">
 
-=== ESTAS DOS IMÁGENES LAS FUSIONARÍA
-<img width="430" alt="Select satellite image type (1): Landsat-8" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ad8dd8ec-d57c-4e12-a74f-1e90b8a4b9b9">
-
-
-<img width="414" alt="Select satellite image type (2): Landsat-8" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/37d6c0cc-5159-4b01-9a3c-d10f1013b885">
 
 ### Select the image that most suits your needs and download it
 
