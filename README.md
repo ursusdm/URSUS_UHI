@@ -54,26 +54,24 @@ And download the first file (1 GB aprox.). It may be necessary to allow pop-up w
 
 After this process, the data of the city of interest is ready to be processed by the URSUS-UHI software.
 
+```diff
+- All downloaded images must be placed in the data folder of the project.
+```
+
 
 ## Run URSUS_UHI software to process the image to detect unfavourable areas
 
 ### Requirements
 
-- R (¿ALGUNA VERSIÓN COMO REQUISITO?)
-- RStudio (¿ALGUNA VERSIÓN COMO REQUISITO?)
-- renv (¿ALGUNA VERSIÓN COMO REQUISITO?)
+- R 4.3.1 or latest version
+- RStudio
+- Some R libraries (renv, shiny, dplyr, ...)
 
 ### Install / Run URSUS_UHI software
   
 - **Clone the repository.** Open your terminal on your local machine and clone the repository
 
       git clone "https://github.com/ursusdm/URSUS_UHI.git"
-    
-  ESTO HABRÍA QUE COMPROBARLO CUANDO ESTÉ PÚBLICO. YO NO HE PODIDO DESCARGARLO ASÍ.
-
-- **Create Data folder** on URSUS_UHI App folder. You can create data folder from the UI or from the terminal with the command mkdir data (in both cases inside the APP folder of the project). ¿Y SI CREAMOS LA CARPETA NOSOTROS, DEJÁNDOLA VACÍA?
-
-  <img width="626" alt="Captura de pantalla 2023-11-29 a las 17 59 09" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ec68efae-1d11-4c05-8d14-0fa4b12a0a0a">
 
 - **Open R project file** placed in the folder
   
@@ -85,29 +83,19 @@ After this process, the data of the city of interest is ready to be processed by
 
       install.packages("renv")
  
-  <img width="226" alt="Captura de pantalla   2023-11-29 a las 18 03 32" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/6ad97af5-496c-452e-9c86-47bc1217273d">
-
   Download dependencies and libraries using renv:  
 
       renv::init()
 
   Select yes (if this is the first time renv is used) and select "Selection 1" to use exactly the same libraries that the application uses in its RStudio environment project.
 
-  QUITARÍA ESTA IMAGEN POR HABER PUESTO EL CÓDIGO
-
-  <img width="387" alt="Captura de pantalla 2023-11-29 a las 17 58 12" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f4782b79-cfe7-4c73-b4cc-ae39febfbbf1">
-
   <img width="639" alt="Captura de pantalla 2023-11-29 a las 18 06 52" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/fd47d9ee-1338-419e-bdff-cd197c44e1d5">
-
-  HE AÑADIDO NUEVO CÓDIGO PARA QUE ESTO QUE VIENE DESPUÉS NO SEA NECESARIO. HAY QUE MIRARLO
 
   If a package is not installed, you can try to install it manually. The required library packages are listed in the app.R file. Use:
   
       install.packages("libraryName")
 
-
-
- <img width="178" alt="Captura de pantalla 2023-11-29 a las 17 51 49" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da2dc255-e2a4-4e4b-967a-5646f04f6a50">
+<img width="178" alt="Captura de pantalla 2023-11-29 a las 17 51 49" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da2dc255-e2a4-4e4b-967a-5646f04f6a50">
 
 <img width="493" alt="Captura de pantalla 2023-11-29 a las 17 52 40" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/6161ed22-902d-4033-a6ac-6552182f4071">
 
