@@ -1,6 +1,6 @@
 # URSUS_UHI
 
-<img width="800" alt="URSUS_UHI: URban SUStainability software for detection of unfavourable areas due to the Urban Heat Island effect" src="https://user-images.githubusercontent.com/68539118/119391636-e1a67700-bcce-11eb-9b01-42cafffdbf31.png">
+<img width="1259" alt="G_A" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2d23532d-7795-41a7-ab77-0d5f3089e60a">
 
 **URSUS_UHI** is a tool for the **automatic detection of unfavourable areas due to the Urban Heat Island (UHI) effect**. 
 
@@ -24,8 +24,6 @@ The following screenshots show the process in detail:
 ### Select the city of interest for the study (Search Criteria tab)
 
 Define "Feature Name" and "Country" (or "State" if US features are used). In this example we select Madrid, the capital of Spain.
-
-=== ESTA IMAGEN HABRÍA QUE VOLVERLA A CAPTURAR (para que esté seleccionado el worl features)
 
 <img width="430" alt="W_F" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/0826446b-95a1-41ea-8eae-76f1e9ad1f08">
 
