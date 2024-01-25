@@ -136,28 +136,14 @@ Red rectangle is the area cover by the selected landsat-8 image.
   Next screenshots show the results calculated from the data.
 
  **NDVI** map (Normalized difference Vegetation Index) and **LST** map (Land Surface Temperature)
-
- <img width="1675" alt="LST_NDVI" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/4c33f6db-4976-49b7-a7b5-3d4a8aa9fb3a">
+ 
+<img width="904" alt="Captura de pantalla 2024-01-25 a las 18 18 03" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2c6da2b3-79ae-4a01-bdcb-259e0c7bf577">
 
  **Clusters** map (with different levels of un) and **DAI** map (Disadvantaged Area Index). 
  
  UNFAVOURABLE AREAS WITH DAI INDEX** This plot show the more disfavourables areas and their damage level.
-
- EN LA APLICACIÓN HEMOS USADO DISFAVORABLE, EN EL DAI DISADVANTAGED Y EN ESTE MANUAL Y CREO QUE EN EL ARTICULO DE 16 CIUDADES UNFAVOURABLE. HAY QUE HOMOGENEIZAR. SEGURAMENTE, ¿DEJAMOS UNFAVOURABLE PARA EL TEXTO? Y ¿DISADVANTAGED PARA EL DAI?
-
- <img width="1671" alt="CLUSTERS_DAI" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ed7ca4d9-a7a5-4956-b1f3-d2c4ee740b49">
-
-  ¿NO SE CALCULABA UN MAPA COMO CON UNA MÁSCARA QUE COMBINABA LOS DOS ÚLTIMOS MAPAS?
-
-  LA IMAGEN CROPPED SE MUY MAL
-
-
-NO ESTOY SEGURO DE QUE ESTO HAGA FALTA O QUIZÁS MEJOR SE PONE DE OTRA FORMA. MÁS ARRIBA APARECEN LOS REQUIREMENT
-## Developed tool 🛠️
-
-* [R](https://www.r-project.org/) - Programming language
-* [RStudio](https://www.rstudio.com/) -  IDE
-* R Libraries (shiny, dplyr, leaflet, raster, rf)
+ 
+<img width="931" alt="Captura de pantalla 2024-01-25 a las 18 19 51" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/1c89c923-040f-496f-8130-4f58d583af64">
 
 
 ## Authors ✒️
