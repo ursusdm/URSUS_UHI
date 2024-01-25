@@ -65,15 +65,6 @@ readMetadata <- function (rasterImageFolder) {
 #Plot RGB image from multibandRasterLayer
 plotRGBImage <- function (multibandRasterLayer) {
   
- 
-  band2 <- multibandRasterLayer[[1]]
-
-  band3 <- multibandRasterLayer[[2]]
-
-  band4 <- multibandRasterLayer[[3]]
-
-  band5 <- multibandRasterLayer[[4]]
- 
   plotRGB(multibandRasterLayer,3,2,1, stretch="lin", scale ="1200", colNA='white')
   
 }

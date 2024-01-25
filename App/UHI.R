@@ -161,7 +161,7 @@ plot_DAI <- function(layerToPaint,name="DAI") {
   layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
   layerDF <- data.frame(layerPoints)
   layerDF <- cbind(layerDF, alpha = 1)
-
+  
   ggplot() +
     geom_raster(data = layerDF ,
                 aes(x = x,
@@ -178,7 +178,6 @@ plot_CLUSTERS_2 <- function(layerToPaint,name="CLUSTERS",clusterColor) {
   layerDF <- data.frame(layerPoints)
   layerDF <- cbind(layerDF, alpha = 1)
   
-  
     ggplot(data = layerDF) +
       geom_raster(aes(x = x, y = y, fill = layer)) + 
       guides(fill = guide_colorbar(title = name)) +
@@ -188,32 +187,34 @@ plot_CLUSTERS_2 <- function(layerToPaint,name="CLUSTERS",clusterColor) {
                             breaks = c(1:3),
                             colours = clusterColor$color[[1]],
                             labels = unlist(clusterColor$label[[1]])) +
-      theme_void() +
-
-      theme(
-        legend.position = "right",
-        legend.text=element_text(size=10)
-
-      )
+      theme_void()+
+      theme(legend.position="bottom")
 
 }
 
-
 plot_NDVI<- function(layerToPaint,name="NDVI") {
   
-  layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
-  layerDF <- data.frame(layerPoints)
-  layerDF <- cbind(layerDF, alpha = 1)
-  
-  ggplot() +
-    geom_raster(data = layerDF ,
+  #layerPoints <- rasterToPoints(layerToPaint, spatial = TRUE)
+  #layerDF <- data.frame(layerPoints)
+  #layerDF <- cbind(layerDF, alpha = 1)
+  #print(plot (layerToPaint))
+  layerDF = as.data.frame(layerToPaint, xy = TRUE, na.rm = FALSE)
+
+  ggplot(height = 200,width = 300) +
+    geom_tile(data = layerDF,
                 aes(x = x,
                     y = y,
                     fill = layer)) +
+    
     guides(fill = guide_colorbar(title = name)) +
     scale_fill_gradientn(colours = rev(terrain.colors(10)))+
-    theme_void()
+    theme_void()+
+    theme(legend.position="bottom")
   
+}
+
+plot_NDVI2<- function(layerToPaint,name="NDVI") {
+  raster::plot (layerToPaint, axes=FALSE, box=FALSE, colNA = "red")
 }
 
 plot_LST<- function(layerToPaint,name="LST") {
@@ -228,8 +229,9 @@ plot_LST<- function(layerToPaint,name="LST") {
                     y = y,
                     fill = layer)) +
     guides(fill = guide_colorbar(title = name)) +
-    scale_fill_gradientn(colours = rev(heat.colors(10)))+
-    theme_void()
+    scale_fill_gradientn(colours = rev(heat.colors(300)))+
+    theme_void()+
+    theme(legend.position="bottom")
   
 }
 
@@ -346,15 +348,15 @@ getClustersColors <- function(DAIPixels, clusteredPixels) {
  
   for (colorIndex in 1:length(myColor)) {
     myColor[colorIndex] <- paletteCommon[6]
-    myClusterLabel[colorIndex]  <- "Favourable"
+    myClusterLabel[colorIndex]  <- "fav."
     cluster[colorIndex]  <- 4
   }
   
   myColor [[maxPosition]] <- paletteCommon[10] #red for cluster disfavourable
-  myClusterLabel [[maxPosition]] <- "More disfavourable" 
+  myClusterLabel [[maxPosition]] <- "unf." 
   
   myColor [[minPosition]] <- paletteCommon[1] #blue for water cluster
-  myClusterLabel [[minPosition]] <- "More favourable" 
+  myClusterLabel [[minPosition]] <- "more fav." 
   
   
   cluster [[maxPosition]] <- maxPosition

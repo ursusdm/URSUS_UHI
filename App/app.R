@@ -48,92 +48,103 @@ ui <- dashboardPage(
   
     dashboardHeader(title = "URSUS_UHI"),
     
-    dashboardSidebar(),
+    dashboardSidebar(disable=TRUE),
     
     dashboardBody(
       
-      fluidRow(
-        
-        class = "text-center",
-        
-          
-        box(
-            shinyDirButton('folder', 'Select image', 'Please select a landsat image folder', FALSE),
-            status = "primary",
-            solidHeader = TRUE,
-            title = "Select landsat-8 image unzip folder",
-            width = 2,
-        ),
-          
-
+      sidebarLayout( 
       
-        box(
-            title = "Select area for determining the more disfavourable areas due to urban heat island ",
-            status = "info",
-            solidHeader = TRUE,
-            leafletOutput("mymap"),
-            p(),
-            actionButton("processUrbanArea", "Process Urban Area"),
-            width = 7
+        sidebarPanel ( width = 5, 
+          
+          verticalLayout( 
+            
+            box(
+                shinyDirButton('folder', 'Select image', 'Please select a landsat image folder and push select button', FALSE),
+                status = "primary",
+                solidHeader = TRUE,
+                title = "Select landsat-8 image",
+                width = 100
+            ),
+          
+            box(
+              title = "Cropped Landsat Image",
+              status = "danger",
+              solidHeader = TRUE,
+              plotOutput("CROPPED"),
+              width = 200
+            ),
+            
+           
+            box(
+              title = "LST",
+              status = "danger",
+              solidHeader = TRUE,
+              plotOutput("LST"),
+              width = 200
+              
+            ),
+            
+            box(
+              title = "NDVI",
+              status = "success",
+              solidHeader = TRUE,
+              width = 200,
+              plotOutput("NDVI"),
+              
+            ),
+              
+           
+            
+            box(
+              title = "Clusters",
+              status = "warning",
+              solidHeader = TRUE,
+              plotOutput("CLUSTERS"),
+              width = 200
+            )
+            
+          )
+          
+        ),
+   
+        mainPanel (   width = 7, 
+          
+          
+          verticalLayout( 
+            
+            box(
+                title = "Select area for determining the more disfavourable areas due to urban heat island ",
+                status = "info",
+                solidHeader = TRUE,
+                leafletOutput("mymap"),
+                
+                p(),
+                actionButton("processUrbanArea", "Process urban area"),
+                width = 12
+         
+            ),
+            
+         
+            box(
+              title = "DAI for unfauvorable area cluster",
+              status = "danger",
+              solidHeader = TRUE,
+              width = 12,
+              plotOutput("DAI")
+            ),
+          
+          ),
+            
+          
+        
+        
+        ),
+        
+        
+      ),
+      
+      
      
-        ),
-        
-        
-        box(
-          title = "Cropped Landsat Image",
-          status = "danger",
-          solidHeader = TRUE,
-          plotOutput("CROPPED"),
-          width = 3
-        )
-        
-        
-      ),
-      
-      fluidRow(
-        
-        class = "text-center",
-        
-        
-        box(
-          title = "LST",
-          status = "danger",
-          solidHeader = TRUE,
-          plotOutput("LST"),
-          width = 6
-        ),
-        
-        box(
-          title = "NDVI",
-          status = "success",
-          solidHeader = TRUE,
-          plotOutput("NDVI"),
-          width = 6
-        )
-        
-      ),
-      
-      fluidRow(
-        
-        class = "text-center",
-        
-        box(
-          title = "CLUSTERS",
-          status = "warning",
-          solidHeader = TRUE,
-          plotOutput("CLUSTERS"),
-          width = 6
-        ),
-        
-        box(
-          title = "DAI for disfavourable area cluster",
-          status = "danger",
-          solidHeader = TRUE,
-          plotOutput("DAI"),
-          width = 6
-        )
-  
-      )
       
     )
     
@@ -247,31 +258,49 @@ server <- function(input, output, session) {
       plotRGBImage(croppedImage)
     })
     
+    
     #calculate NDVI
-    output$NDVI <- renderPlot ({
+    output$NDVI <- renderPlot ( {
       
-      plot_NDVI(NDVILayer)
+      plot(NDVILayer, axes=FALSE, box=FALSE, horizontal = TRUE)
       
-    })
+      
+    } )
+    
+
     
     #calculate LST
 
-    output$LST <- renderPlot ({
-      plot_LST(rasterLST)
-    })
+    output$LST <- renderPlot ( {
+                                 
+      plot(rasterLST, axes=FALSE, box=FALSE, col = heat.colors(300), horizontal = TRUE)
+                                 
+    }, height = 'auto', width = 'auto')
     
     # DAI for unfavourable areas
     
     output$DAI <- renderPlot ({
-      plot_DAI(DAIForClusterDisfavourable)
+      #plot_DAI(DAIForClusterDisfavourable)
+
+      plot(DAIForClusterDisfavourable, axes=FALSE, box=FALSE, col =  wes_palette("Zissou1", 10, type = "continuous"), horizontal = FALSE)
+      
+      #legend("bottom", legend = labels, fill = colours)
+      
     })
     
     #calculate cluster
 
     output$CLUSTERS <- renderPlot ({
-      #plot(clusteringRaster,axes = FALSE, box = FALSE, horizontal = TRUE, col = colorForClustering)
-      plot_CLUSTERS_2 (clusteringRaster, clusterColor =  colorForClustering)
-    })
+      
+      #plot_CLUSTERS_2 (clusteringRaster, clusterColor =  colorForClustering)
+      labels = unlist(colorForClustering$label[[1]])
+      colours = colorForClustering$color[[1]]
+                      
+      plot(clusteringRaster, axes=FALSE, box=FALSE, col = colours, legend = FALSE)
+      
+      legend("bottom", legend = labels, fill = colours)
+      
+    },height = 'auto', width = 'auto')
     
 
     
