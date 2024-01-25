@@ -121,7 +121,7 @@ After this process, the data of the city of interest is ready to be processed by
 
   <img width="401" alt="select_b" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a4d86611-bfe5-4a05-8e18-a5e371593091">
 
-  <img width="897" alt="Captura de Pantalla 2023-11-08 a las 15 25 08" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/8d51b71e-1a92-47b4-a758-db76747a46ab">
+  <img width="884" alt="files" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/84e0fe19-178c-4c9f-813a-6afc37474cfb">
 
   
 ### Crop the area of interest over the map. Use the icon with a black square to define this area. It is marked in the map by a blue rectangle.
@@ -130,9 +130,6 @@ Red rectangle is the area cover by the selected landsat-8 image.
   
   <img width="967" alt="MAP" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/5f5176aa-e313-41b2-861e-17e886cc79e3">
   
-  <img width="883" alt="Madrid_img" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a75b2d1d-ebb4-40e5-abb2-473aecbf4486">
-
-
 
 ### Process the urban area
 
