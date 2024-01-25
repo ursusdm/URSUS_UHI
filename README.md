@@ -1,4 +1,4 @@
-# URSUS_UHI
+ # URSUS_UHI
 
 <img width="1259" alt="G_A" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2d23532d-7795-41a7-ab77-0d5f3089e60a">
 
@@ -27,7 +27,11 @@ Define "Feature Name" and "Country" (or "State" if US features are used). In thi
 
 <img width="430" alt="W_F" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/0826446b-95a1-41ea-8eae-76f1e9ad1f08">
 
-Press the "Show" button and select the most appropriate element. A map with the selected item is then displayed.
+Select the most appropriate element and press the "Show" button.
+
+<img width="427" alt="Captura de pantalla 2024-01-25 a las 12 57 20" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/88bfab5f-0eaa-48df-9270-beee435b553d">
+
+A map with the selected item is then displayed.
 
 <img width="1679" alt="Select the city of study interest (2): Map" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/90d187d2-1b39-4557-87cb-eb7e67a09c51">
 
@@ -54,26 +58,24 @@ And download the first file (1 GB aprox.). It may be necessary to allow pop-up w
 
 After this process, the data of the city of interest is ready to be processed by the URSUS-UHI software.
 
+```diff
+- All downloaded images must be placed unzipped in the data folder of the project.
+```
+
 
 ## Run URSUS_UHI software to process the image to detect unfavourable areas
 
 ### Requirements
 
-- R (¿ALGUNA VERSIÓN COMO REQUISITO?)
-- RStudio (¿ALGUNA VERSIÓN COMO REQUISITO?)
-- renv (¿ALGUNA VERSIÓN COMO REQUISITO?)
+- R 4.3.1 or latest version
+- RStudio
+- Some R libraries (renv, shiny, dplyr, ...)
 
 ### Install / Run URSUS_UHI software
   
 - **Clone the repository.** Open your terminal on your local machine and clone the repository
 
       git clone "https://github.com/ursusdm/URSUS_UHI.git"
-    
-  ESTO HABRÍA QUE COMPROBARLO CUANDO ESTÉ PÚBLICO. YO NO HE PODIDO DESCARGARLO ASÍ.
-
-- **Create Data folder** on URSUS_UHI App folder. You can create data folder from the UI or from the terminal with the command mkdir data (in both cases inside the APP folder of the project). ¿Y SI CREAMOS LA CARPETA NOSOTROS, DEJÁNDOLA VACÍA?
-
-  <img width="626" alt="Captura de pantalla 2023-11-29 a las 17 59 09" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ec68efae-1d11-4c05-8d14-0fa4b12a0a0a">
 
 - **Open R project file** placed in the folder
   
@@ -85,29 +87,19 @@ After this process, the data of the city of interest is ready to be processed by
 
       install.packages("renv")
  
-  <img width="226" alt="Captura de pantalla   2023-11-29 a las 18 03 32" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/6ad97af5-496c-452e-9c86-47bc1217273d">
-
   Download dependencies and libraries using renv:  
 
       renv::init()
 
   Select yes (if this is the first time renv is used) and select "Selection 1" to use exactly the same libraries that the application uses in its RStudio environment project.
 
-  QUITARÍA ESTA IMAGEN POR HABER PUESTO EL CÓDIGO
-
-  <img width="387" alt="Captura de pantalla 2023-11-29 a las 17 58 12" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f4782b79-cfe7-4c73-b4cc-ae39febfbbf1">
-
   <img width="639" alt="Captura de pantalla 2023-11-29 a las 18 06 52" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/fd47d9ee-1338-419e-bdff-cd197c44e1d5">
-
-  HE AÑADIDO NUEVO CÓDIGO PARA QUE ESTO QUE VIENE DESPUÉS NO SEA NECESARIO. HAY QUE MIRARLO
 
   If a package is not installed, you can try to install it manually. The required library packages are listed in the app.R file. Use:
   
       install.packages("libraryName")
 
-
-
- <img width="178" alt="Captura de pantalla 2023-11-29 a las 17 51 49" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da2dc255-e2a4-4e4b-967a-5646f04f6a50">
+<img width="178" alt="Captura de pantalla 2023-11-29 a las 17 51 49" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da2dc255-e2a4-4e4b-967a-5646f04f6a50">
 
 <img width="493" alt="Captura de pantalla 2023-11-29 a las 17 52 40" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/6161ed22-902d-4033-a6ac-6552182f4071">
 
@@ -125,52 +117,31 @@ After this process, the data of the city of interest is ready to be processed by
 
 ### Select the image
 
-  Search for the desired image in the data folder.
+  Search for the desired image in the data folder. Select image folder (not files inside). In this example, select Madrid folder and push select 'button'.
 
-  NO SE DICE QUE HAY QUE DESCOMPRIMIR EL TAR. SE INDICA ALGO EN EL TEXTO DE LA CAJA DONDE ESTÁ EL BOTÓN
-  
-  <img width="287" alt="Captura de Pantalla 2023-11-05 a las 1 56 11" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ae012be0-fa36-4cc7-86e0-029a1cbabd1d">
+  <img width="401" alt="select_b" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a4d86611-bfe5-4a05-8e18-a5e371593091">
 
-  <img width="897" alt="Captura de Pantalla 2023-11-08 a las 15 25 08" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/8d51b71e-1a92-47b4-a758-db76747a46ab">
+  <img width="884" alt="files" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/84e0fe19-178c-4c9f-813a-6afc37474cfb">
 
   
 ### Crop the area of interest over the map. Use the icon with a black square to define this area. It is marked in the map by a blue rectangle.
 
-ESTO NO LO ENTIENDO.
 Red rectangle is the area cover by the selected landsat-8 image.
   
   <img width="967" alt="MAP" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/5f5176aa-e313-41b2-861e-17e886cc79e3">
   
-  <img width="971" alt="croped" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/7b775255-5685-4bbe-92d8-15deeea82d49">
-
 
 ### Process the urban area
 
   Next screenshots show the results calculated from the data.
 
  **NDVI** map (Normalized difference Vegetation Index) and **LST** map (Land Surface Temperature)
-
- <img width="1675" alt="LST_NDVI" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/4c33f6db-4976-49b7-a7b5-3d4a8aa9fb3a">
-
- **Clusters** map (with different levels of un) and **DAI** map (Disadvantaged Area Index). 
  
- UNFAVOURABLE AREAS WITH DAI INDEX** This plot show the more disfavourables areas and their damage level.
+<img width="904" alt="Captura de pantalla 2024-01-25 a las 18 18 03" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2c6da2b3-79ae-4a01-bdcb-259e0c7bf577">
 
- EN LA APLICACIÓN HEMOS USADO DISFAVORABLE, EN EL DAI DISADVANTAGED Y EN ESTE MANUAL Y CREO QUE EN EL ARTICULO DE 16 CIUDADES UNFAVOURABLE. HAY QUE HOMOGENEIZAR. SEGURAMENTE, ¿DEJAMOS UNFAVOURABLE PARA EL TEXTO? Y ¿DISADVANTAGED PARA EL DAI?
-
- <img width="1671" alt="CLUSTERS_DAI" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ed7ca4d9-a7a5-4956-b1f3-d2c4ee740b49">
-
-  ¿NO SE CALCULABA UN MAPA COMO CON UNA MÁSCARA QUE COMBINABA LOS DOS ÚLTIMOS MAPAS?
-
-  LA IMAGEN CROPPED SE MUY MAL
-
-
-NO ESTOY SEGURO DE QUE ESTO HAGA FALTA O QUIZÁS MEJOR SE PONE DE OTRA FORMA. MÁS ARRIBA APARECEN LOS REQUIREMENT
-## Developed tool 🛠️
-
-* [R](https://www.r-project.org/) - Programming language
-* [RStudio](https://www.rstudio.com/) -  IDE
-* R Libraries (shiny, dplyr, leaflet, raster, rf)
+ **Clusters** map (the urban areas are classified based on different levels of emergency in terms of adding green infrastructure.) and **DAI** map (Disadvantaged Area Index). 
+ 
+<img width="931" alt="Captura de pantalla 2024-01-25 a las 18 19 51" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/1c89c923-040f-496f-8130-4f58d583af64">
 
 
 ## Authors ✒️

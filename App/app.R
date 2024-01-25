@@ -273,7 +273,7 @@ server <- function(input, output, session) {
 
     output$LST <- renderPlot ( {
                                  
-      plot(rasterLST, axes=FALSE, box=FALSE, col = heat.colors(300), horizontal = TRUE)
+      plot(rasterLST, axes=FALSE, box=FALSE, col = rev(heat.colors(300)), horizontal = TRUE)
                                  
     }, height = 'auto', width = 'auto')
     
