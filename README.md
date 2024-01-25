@@ -137,7 +137,7 @@ Red rectangle is the area cover by the selected landsat-8 image.
  
   <img width="877" alt="Captura de pantalla 2024-01-25 a las 22 12 56" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/262cd2a3-51d5-4274-a59f-041276e6506d">
 
- **Clusters** map (the urban areas are classified based on different levels of emergency in terms of adding green infrastructure.) and **DAI** map (Disadvantaged Area Index).
+ **Clusters** map (the urban areas are classified based on different levels (favourable (fav.), more favourable (more fav.), unfavourable (unf.) ) of emergency in terms of adding green infrastructure.) and **DAI** map (Disadvantaged Area Index).
  
  <img width="876" alt="Captura de pantalla 2024-01-25 a las 22 11 19" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/40fdd4c7-85e3-40f7-acf0-d7c1f6a8cb90">
 
