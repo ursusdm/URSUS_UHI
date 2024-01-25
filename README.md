@@ -1,4 +1,4 @@
-# URSUS_UHI
+ # URSUS_UHI
 
 <img width="1259" alt="G_A" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2d23532d-7795-41a7-ab77-0d5f3089e60a">
 
@@ -27,7 +27,11 @@ Define "Feature Name" and "Country" (or "State" if US features are used). In thi
 
 <img width="430" alt="W_F" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/0826446b-95a1-41ea-8eae-76f1e9ad1f08">
 
-Press the "Show" button and select the most appropriate element. A map with the selected item is then displayed.
+Select the most appropriate element and press the "Show" button.
+
+<img width="427" alt="Captura de pantalla 2024-01-25 a las 12 57 20" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/88bfab5f-0eaa-48df-9270-beee435b553d">
+
+A map with the selected item is then displayed.
 
 <img width="1679" alt="Select the city of study interest (2): Map" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/90d187d2-1b39-4557-87cb-eb7e67a09c51">
 
@@ -55,7 +59,7 @@ And download the first file (1 GB aprox.). It may be necessary to allow pop-up w
 After this process, the data of the city of interest is ready to be processed by the URSUS-UHI software.
 
 ```diff
-- All downloaded images must be placed in the data folder of the project.
+- All downloaded images must be placed unzipped in the data folder of the project.
 ```
 
 
@@ -113,23 +117,21 @@ After this process, the data of the city of interest is ready to be processed by
 
 ### Select the image
 
-  Search for the desired image in the data folder.
+  Search for the desired image in the data folder. Select image folder (not files inside). In this example, select Madrid folder and push select 'button'.
 
-  NO SE DICE QUE HAY QUE DESCOMPRIMIR EL TAR. SE INDICA ALGO EN EL TEXTO DE LA CAJA DONDE ESTÁ EL BOTÓN
-  
-  <img width="287" alt="Captura de Pantalla 2023-11-05 a las 1 56 11" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ae012be0-fa36-4cc7-86e0-029a1cbabd1d">
+  <img width="401" alt="select_b" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a4d86611-bfe5-4a05-8e18-a5e371593091">
 
   <img width="897" alt="Captura de Pantalla 2023-11-08 a las 15 25 08" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/8d51b71e-1a92-47b4-a758-db76747a46ab">
 
   
 ### Crop the area of interest over the map. Use the icon with a black square to define this area. It is marked in the map by a blue rectangle.
 
-ESTO NO LO ENTIENDO.
 Red rectangle is the area cover by the selected landsat-8 image.
   
   <img width="967" alt="MAP" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/5f5176aa-e313-41b2-861e-17e886cc79e3">
   
-  <img width="971" alt="croped" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/7b775255-5685-4bbe-92d8-15deeea82d49">
+  <img width="883" alt="Madrid_img" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a75b2d1d-ebb4-40e5-abb2-473aecbf4486">
+
 
 
 ### Process the urban area
