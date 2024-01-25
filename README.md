@@ -110,26 +110,24 @@ After this process, the data of the city of interest is ready to be processed by
 ### Run the application
 
   Click button on "Run App" on file App.R
-
-  <img width="1190" alt="Captura de pantalla 2023-11-29 a las 18 10 08" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f631958a-50f3-4ed4-9356-cc0c5f99760c">
+  
+  <img width="1028" alt="Captura de pantalla 2024-01-25 a las 21 43 30" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f2826ee4-3d62-4a81-adbe-642c0c0668e9">
 
   The app is executed in a new window
 
 ### Select the image
 
-  Search for the desired image in the data folder. Select image folder (not files inside). In this example, select Madrid folder and push select 'button'.
+  Search for the desired image in the data folder. Select image folder (not files inside). In this example, select Malaga folder and push select 'button'.
 
   <img width="401" alt="select_b" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a4d86611-bfe5-4a05-8e18-a5e371593091">
 
-  <img width="884" alt="files" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/84e0fe19-178c-4c9f-813a-6afc37474cfb">
+  <img width="877" alt="Captura de pantalla 2024-01-25 a las 22 14 18" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/d4c2d545-5b3a-4e7b-a765-11d46275d599">
 
-  
 ### Crop the area of interest over the map. Use the icon with a black square to define this area. It is marked in the map by a blue rectangle.
 
 Red rectangle is the area cover by the selected landsat-8 image.
   
-  <img width="967" alt="MAP" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/5f5176aa-e313-41b2-861e-17e886cc79e3">
-  
+<img width="778" alt="Captura de pantalla 2024-01-25 a las 21 57 46" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/e36fbfd8-2fd6-49be-a985-edc49a985a2f">
 
 ### Process the urban area
 
@@ -137,11 +135,11 @@ Red rectangle is the area cover by the selected landsat-8 image.
 
  **NDVI** map (Normalized difference Vegetation Index) and **LST** map (Land Surface Temperature)
  
-<img width="904" alt="Captura de pantalla 2024-01-25 a las 18 18 03" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2c6da2b3-79ae-4a01-bdcb-259e0c7bf577">
+  <img width="877" alt="Captura de pantalla 2024-01-25 a las 22 12 56" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/262cd2a3-51d5-4274-a59f-041276e6506d">
 
- **Clusters** map (the urban areas are classified based on different levels of emergency in terms of adding green infrastructure.) and **DAI** map (Disadvantaged Area Index). 
+ **Clusters** map (the urban areas are classified based on different levels (favourable (fav.), more favourable (more fav.), unfavourable (unf.) ) of emergency in terms of adding green infrastructure.) and **DAI** map (Disadvantaged Area Index).
  
-<img width="931" alt="Captura de pantalla 2024-01-25 a las 18 19 51" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/1c89c923-040f-496f-8130-4f58d583af64">
+ <img width="876" alt="Captura de pantalla 2024-01-25 a las 22 11 19" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/40fdd4c7-85e3-40f7-acf0-d7c1f6a8cb90">
 
 
 ## Authors ✒️
