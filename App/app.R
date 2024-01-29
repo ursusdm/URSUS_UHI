@@ -54,97 +54,111 @@ ui <- dashboardPage(
       
       sidebarLayout( 
       
-        sidebarPanel ( width = 5, 
+        sidebarPanel ( width = 3, 
           
           verticalLayout( 
             
             box(
-                shinyDirButton('folder', 'Select image', 'Please select a landsat image folder and push select button', FALSE),
+                shinyDirButton('folder', 'Folder selector', 'Please select a landsat image folder and push select button', FALSE),
                 status = "primary",
                 solidHeader = TRUE,
                 title = "Select landsat-8 image",
                 width = 100
             ),
           
-            box(
-              title = "Cropped Landsat Image",
-              status = "danger",
-              solidHeader = TRUE,
-              plotOutput("CROPPED"),
-              width = 200
-            ),
-            
            
-            box(
-              title = "LST",
-              status = "danger",
-              solidHeader = TRUE,
-              plotOutput("LST"),
-              width = 200
-              
-            ),
-            
-            box(
-              title = "NDVI",
-              status = "success",
-              solidHeader = TRUE,
-              width = 200,
-              plotOutput("NDVI"),
-              
-            ),
-              
-           
-            
-            box(
-              title = "Clusters",
-              status = "warning",
-              solidHeader = TRUE,
-              plotOutput("CLUSTERS"),
-              width = 200
-            )
             
           )
           
         ),
    
-        mainPanel (   width = 7, 
-          
-          
-          verticalLayout( 
+        mainPanel (   width = 9,
+                      
+            tabsetPanel(
+            type = "tabs",
             
-            box(
-                title = "Select area for determining the more disfavourable areas due to urban heat island ",
-                status = "info",
-                solidHeader = TRUE,
-                leafletOutput("mymap"),
+            tabPanel("Main", 
+                     
+                     verticalLayout( 
+                       
+                       box(
+                         title = "Area selected to determine the most unfavorable zones due to the urban heat island (UHI) effect ",
+                         status = "info",
+                         solidHeader = TRUE,
+                         leafletOutput("mymap"),
+                         
+                         p(),
+                         actionButton("processUrbanArea", "Process urban area"),
+                         width = 12
+                         
+                       ),
+                       
+                       
+                       box(
+                         title = "Disadvantaged Area Index (DAI) for the unfavourable area cluster",
+                         status = "danger",
+                         solidHeader = TRUE,
+                         width = 12,
+                         plotOutput("DAI")
+                       )
+                       
+                     )
+                     
+            ),
+            
+            tabPanel("Additional information",
+            
+              verticalLayout( 
                 
-                p(),
-                actionButton("processUrbanArea", "Process urban area"),
-                width = 12
-         
-            ),
+                # box(
+                #   title = "Cropped Landsat Image",
+                #   status = "danger",
+                #   solidHeader = TRUE,
+                #   plotOutput("CROPPED"),
+                #   width = 200
+                # ),
+                
+                
+                box(
+                  title = "LST",
+                  status = "danger",
+                  solidHeader = TRUE,
+                  plotOutput("LST"),
+                  width = 200
+                  
+                ),
+                
+                box(
+                  title = "NDVI",
+                  status = "success",
+                  solidHeader = TRUE,
+                  width = 200,
+                  plotOutput("NDVI"),
+                  
+                ),
+                
+                
+                
+                box(
+                  title = "Clusters",
+                  status = "warning",
+                  solidHeader = TRUE,
+                  plotOutput("CLUSTERS"),
+                  width = 200
+                )
+              
+              )
+  
+            )
             
-         
-            box(
-              title = "DAI for unfauvorable area cluster",
-              status = "danger",
-              solidHeader = TRUE,
-              width = 12,
-              plotOutput("DAI")
-            ),
-          
           ),
-            
           
-        
-        
+          
         ),
         
         
       ),
       
-      
-     
       
     )
     
@@ -254,15 +268,16 @@ server <- function(input, output, session) {
     #disfAras <- getMoreDisfavourableAreas(rasterDAI, clusteringRaster)
     
     #Plot RDG image landsat8
-    output$CROPPED <- renderPlot ({
-      plotRGBImage(croppedImage)
-    })
+    # output$CROPPED <- renderPlot ({
+    #   plotRGBImage(croppedImage)
+    # })
     
     
     #calculate NDVI
     output$NDVI <- renderPlot ( {
       
-      plot(NDVILayer, axes=FALSE, box=FALSE, horizontal = TRUE)
+      plot(NDVILayer, axes=FALSE, box=FALSE, horizontal = TRUE,
+           legend.args = list(text = 'NDVI'))
       
       
     } )
@@ -273,8 +288,12 @@ server <- function(input, output, session) {
 
     output$LST <- renderPlot ( {
                                  
-      plot(rasterLST, axes=FALSE, box=FALSE, col = rev(heat.colors(300)), horizontal = TRUE)
-                                 
+      plot(rasterLST, axes=FALSE, box=FALSE, col = rev(heat.colors(300)), horizontal = TRUE,
+           legend.args = list(text = 'LST') )
+                    
+      
+      
+                   
     }, height = 'auto', width = 'auto')
     
     # DAI for unfavourable areas
@@ -282,7 +301,8 @@ server <- function(input, output, session) {
     output$DAI <- renderPlot ({
       #plot_DAI(DAIForClusterDisfavourable)
 
-      plot(DAIForClusterDisfavourable, axes=FALSE, box=FALSE, col =  wes_palette("Zissou1", 10, type = "continuous"), horizontal = FALSE)
+      plot(DAIForClusterDisfavourable, axes=FALSE, box=FALSE, col =  wes_palette("Zissou1", 10, type = "continuous"), horizontal = TRUE,
+           legend.args = list(text = 'DAI'))
       
       #legend("bottom", legend = labels, fill = colours)
       
@@ -296,7 +316,8 @@ server <- function(input, output, session) {
       labels = unlist(colorForClustering$label[[1]])
       colours = colorForClustering$color[[1]]
                       
-      plot(clusteringRaster, axes=FALSE, box=FALSE, col = colours, legend = FALSE)
+      plot(clusteringRaster, axes=FALSE, box=FALSE, col = colours, legend = FALSE,  
+           legend.args = list(text = 'CLUSTERS'))
       
       legend("bottom", legend = labels, fill = colours)
       
