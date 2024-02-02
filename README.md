@@ -15,8 +15,6 @@ The tool is very simple to use and consists of the following steps.
 
       2.3. **Show results**
 
-     <img width="1063" alt="Captura de pantalla 2024-02-02 a las 13 49 15" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/06f43bb0-59e2-4937-8379-1b172d4474f8">
-
 
 ## Download a Landsat-8 image of the city of interest
 
