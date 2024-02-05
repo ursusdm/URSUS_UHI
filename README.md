@@ -49,7 +49,7 @@ Search for Landsat-8 image and press the "Results" button
 
 Each image has a list of buttons to interact with it. Click on the "Download" button for that image (green arrow going down to a hard disk).
 
-<img width="806" alt="Select the image that most suits" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/21211a9e-5221-4736-96d0-18ec701c9786">
+<img width="700" alt="Select the image that most suits" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/21211a9e-5221-4736-96d0-18ec701c9786">
 
 Click in the "Products options" button
 
