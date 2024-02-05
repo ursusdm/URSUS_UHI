@@ -1,6 +1,6 @@
  # URSUS_UHI
 
-<img width="1259" alt="G_A" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2d23532d-7795-41a7-ab77-0d5f3089e60a">
+<img width="800" alt="Graphical_Abstract" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/2d23532d-7795-41a7-ab77-0d5f3089e60a">
 
 **URSUS_UHI** is a tool for the **automatic detection of unfavourable areas due to the Urban Heat Island (UHI) effect**. 
 
@@ -24,45 +24,45 @@ The following screenshots show the process in detail:
 
 ### Select the city of interest for the study (Search Criteria tab)
 
-Define "Feature Name" and "Country" (or "State" if US features are used). In this example we select Madrid, the capital of Spain.
+Define a criterion to filter the city of interest. There are different alternatives, for example:
 
-<img width="430" alt="W_F" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/0826446b-95a1-41ea-8eae-76f1e9ad1f08">
+  1. If it is the capital of a country or first-order administrative division. The "Feature (GNIS)" geocoding method can be used. Here, the "Feature Name" and "Country" are defined (or "State" if US features are used). For example, if we are interested in Madrid, the capital of Spain we will get
+   <img width="300" alt="Select the city of study interest (1): Madrid" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/88bfab5f-0eaa-48df-9270-beee435b553d">
 
-Select the most appropriate element and press the "Show" button.
+ 2. If it is not listed with the "Feature (GNIS) geocoding method", the "Address/place" can be used. For example, if we are interested in Malaga, the capital of one Spanish province we will get
+   <img width="300" alt="Select the city of study interest (1): Malaga" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/e10500b0-d082-41bb-8d0a-b80d5156d0c0">
 
-<img width="427" alt="Captura de pantalla 2024-01-25 a las 12 57 20" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/88bfab5f-0eaa-48df-9270-beee435b553d">
 
-A map with the selected item is then displayed.
+Then, select the most appropriate element and press the "Show" button. A map with the selected item is then displayed.
 
-<img width="1679" alt="Select the city of study interest (2): Map" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/90d187d2-1b39-4557-87cb-eb7e67a09c51">
+The rest of the examples in this manual will use Malaga as the city of interest.
+<img width="800" alt="Select the city of study interest (2): Map" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/f8c45581-2be9-4093-8d17-e60883e8c0e1">
 
 ### Select satellite image type: LANDSAT-8 (Data Sets tab)
 
 Search for Landsat-8 image and press the "Results" button
 
-<img width="439" alt="result_button" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ec40f2e3-c1c7-433f-b61a-7178a4627cbe">
+<img width="300" alt="result_button" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/ec40f2e3-c1c7-433f-b61a-7178a4627cbe">
 
 
 ### Select the image that most suits your needs and download it
 
 Each image has a list of buttons to interact with it. Click on the "Download" button for that image (green arrow going down to a hard disk).
 
-<img width="1079" alt="ds" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da82dc61-f2e3-429c-a588-2a70031d8d83">
+<img width="806" alt="Select the image that most suits" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/21211a9e-5221-4736-96d0-18ec701c9786">
 
 Click in the "Products options" button
 
- <img width="445" alt="Captura de pantalla 2023-11-29 a las 17 30 28" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/26319dfb-edca-42f5-808f-3741c6a1daed">
+ <img width="300" alt="Products options button" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/26319dfb-edca-42f5-808f-3741c6a1daed">
 
 And download the first file (1 GB aprox.). It may be necessary to allow pop-up windows
-  
-<img width="934" alt="dwnld" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/22f10cd8-5942-4b99-ba4d-02961bc1fedd">
+
+  <img width="500" alt="Download file" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/ef13bda8-2214-4eb1-a68d-37991ecea9d6">
 
 After this process, the data of the city of interest is ready to be processed by the URSUS-UHI software.
 
-```diff
-- All downloaded images must be placed unzipped in the data folder of the project.
-```
-
+> [!NOTE]  
+> All downloaded images must be placed unzipped in the data folder of the project.
 
 ## Run URSUS_UHI software to process the image to detect unfavourable areas
 
@@ -80,7 +80,7 @@ After this process, the data of the city of interest is ready to be processed by
 
 - **Open R project file** placed in the folder
   
-  <img width="121" alt="Captura de pantalla 2023-11-29 a las 17 56 59" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/27ed6bd7-fa32-4dee-8b95-09f2b65b5958">
+  <img width="121" alt="R file" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/27ed6bd7-fa32-4dee-8b95-09f2b65b5958">
 
 - **Install / use renv package**. This package helps you to create reproducible environments for your R projects.
 
@@ -94,54 +94,59 @@ After this process, the data of the city of interest is ready to be processed by
 
   Select yes (if this is the first time renv is used) and select "Selection 1" to use exactly the same libraries that the application uses in its RStudio environment project.
 
-  <img width="639" alt="Captura de pantalla 2023-11-29 a las 18 06 52" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/fd47d9ee-1338-419e-bdff-cd197c44e1d5">
+  <img width="500" alt="renv library" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/fd47d9ee-1338-419e-bdff-cd197c44e1d5">
 
-  If a package is not installed, you can try to install it manually. The required library packages are listed in the app.R file. Use:
+  If a package is not installed, you can try to install it manually.
   
       install.packages("libraryName")
 
-<img width="178" alt="Captura de pantalla 2023-11-29 a las 17 51 49" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/da2dc255-e2a4-4e4b-967a-5646f04f6a50">
+  The required library packages are listed in the app.R file where there is code to automatically load such libraries.
 
-<img width="493" alt="Captura de pantalla 2023-11-29 a las 17 52 40" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/6161ed22-902d-4033-a6ac-6552182f4071">
-
-
-
+  
 ## Load the image and crop the area of ​​interest interactively on the map 🚀
  
 ### Run the application
 
   Click button on "Run App" on file App.R
   
-  <img width="1028" alt="Captura de pantalla 2024-01-25 a las 21 43 30" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f2826ee4-3d62-4a81-adbe-642c0c0668e9">
+  <img width="400" alt="Run App in Rstudio" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/f2826ee4-3d62-4a81-adbe-642c0c0668e9">
 
   The app is executed in a new window
 
+  <img width="300" alt="Running App" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/32637a0f-deb4-4ebf-93f3-cf417edf1226">
+
 ### Select the image
 
-  Search for the desired image in the data folder. Select image folder (not files inside). In this example, select Malaga folder and push select 'button'.
+  Search for the folder with the desired images.
 
-  <img width="401" alt="select_b" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/a4d86611-bfe5-4a05-8e18-a5e371593091">
-
-  <img width="877" alt="Captura de pantalla 2024-01-25 a las 22 14 18" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/d4c2d545-5b3a-4e7b-a765-11d46275d599">
-
-### Crop the area of interest over the map. Use the icon with a black square to define this area. It is marked in the map by a blue rectangle.
-
-Red rectangle is the area cover by the selected landsat-8 image.
+  <img width="150" alt="Select folder" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/41882cd5-dc82-4f9e-84d2-8006fcdce9d7">
   
-<img width="778" alt="Captura de pantalla 2024-01-25 a las 21 57 46" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/e36fbfd8-2fd6-49be-a985-edc49a985a2f">
+  Select the folder (not any file inside). In this example, select Malaga folder and click "Select" button.
+
+  <img width="500" alt="Select Malaga folder" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/64526344-1a82-4cae-bc77-438c0b647f46">
+
+
+### Crop the area of interest over the map
+The red rectangle, sometimes visible, is the area covered by the selected landsat-8 image, a very large area.
+
+Move on the map, zooming in and out, and find the area of interest.
+
+Use the icon with a black square to define this area. It is marked in the map by a blue rectangle. 
+<img width="500" alt="Select area of interest" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/f1194338-4ee0-4997-a644-468b6247d97b">
 
 ### Process the urban area
 
   Next screenshots show the results calculated from the data.
 
- **NDVI** map (Normalized difference Vegetation Index) and **LST** map (Land Surface Temperature)
- 
-  <img width="877" alt="Captura de pantalla 2024-01-25 a las 22 12 56" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/262cd2a3-51d5-4274-a59f-041276e6506d">
+ **Disadvantaged Area Index (DAI)** for the unfavourable area cluster
+  <img width="600" alt="DAI map" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/713e4180-d817-4f10-9805-54aaaef9d683">
 
- **Clusters** map (the urban areas are classified based on different levels (favourable (fav.), more favourable (more fav.), unfavourable (unf.) ) of emergency in terms of adding green infrastructure.) and **DAI** map (Disadvantaged Area Index).
- 
- <img width="876" alt="Captura de pantalla 2024-01-25 a las 22 11 19" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/40fdd4c7-85e3-40f7-acf0-d7c1f6a8cb90">
+ **Additional map:** **LST** (Land Surface Temperature) map, **NDVI** (Normalized difference Vegetation Index) map and **Clusters** map (urban areas classified on different levels (favourable (fav.), more favourable (more fav.), unfavourable (unf.))
+ <img width="300" alt="LST" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/47fb4b39-a078-4939-8cc4-8c18b6a371df">
+ <img width="300" alt="NDVI" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/0dc04521-114d-40c8-91d4-a0abccf18a47">
+ <img width="300" alt="CLUSTER" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/994a2e89-4622-4594-8134-961fd57a36a5">
 
+ 
 
 ## Authors ✒️
 
