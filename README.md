@@ -28,7 +28,7 @@ Define a criterion to filter the city of interest. There are different alternati
 
   1. If it is the capital of a country or first-order administrative division. The "Feature (GNIS)" geocoding method can be used. Here, the "Feature Name" and "Country" are defined (or "State" if US features are used). For example, if we are interested in Madrid, the capital of Spain we will get
    <img width="300" alt="Select the city of study interest (1): Madrid" src="https://github.com/ursusdm/URSUS_UHI/assets/68539118/88bfab5f-0eaa-48df-9270-beee435b553d">
-
+ 
  2. If it is not listed with the "Feature (GNIS) geocoding method", the "Address/place" can be used. For example, if we are interested in Malaga, the capital of one Spanish province we will get
    <img width="300" alt="Select the city of study interest (1): Malaga" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/e10500b0-d082-41bb-8d0a-b80d5156d0c0">
 
@@ -36,6 +36,7 @@ Define a criterion to filter the city of interest. There are different alternati
 Then, select the most appropriate element and press the "Show" button. A map with the selected item is then displayed.
 
 The rest of the examples in this manual will use Malaga as the city of interest.
+
 <img width="800" alt="Select the city of study interest (2): Map" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/f8c45581-2be9-4093-8d17-e60883e8c0e1">
 
 ### Select satellite image type: LANDSAT-8 (Data Sets tab)
@@ -132,6 +133,7 @@ The red rectangle, sometimes visible, is the area covered by the selected landsa
 Move on the map, zooming in and out, and find the area of interest.
 
 Use the icon with a black square to define this area. It is marked in the map by a blue rectangle. 
+
 <img width="500" alt="Select area of interest" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/f1194338-4ee0-4997-a644-468b6247d97b">
 
 ### Process the urban area
@@ -139,9 +141,11 @@ Use the icon with a black square to define this area. It is marked in the map by
   Next screenshots show the results calculated from the data.
 
  **Disadvantaged Area Index (DAI)** for the unfavourable area cluster
+ 
   <img width="600" alt="DAI map" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/713e4180-d817-4f10-9805-54aaaef9d683">
 
  **Additional map:** **LST** (Land Surface Temperature) map, **NDVI** (Normalized difference Vegetation Index) map and **Clusters** map (urban areas classified on different levels (favourable (fav.), more favourable (more fav.), unfavourable (unf.))
+ 
  <img width="300" alt="LST" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/47fb4b39-a078-4939-8cc4-8c18b6a371df">
  <img width="300" alt="NDVI" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/0dc04521-114d-40c8-91d4-a0abccf18a47">
  <img width="300" alt="CLUSTER" src="https://github.com/ursusdm/URSUS_UHI/assets/33939770/994a2e89-4622-4594-8134-961fd57a36a5">
